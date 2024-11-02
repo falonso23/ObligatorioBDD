@@ -40,7 +40,7 @@ CREATE TABLE Alumno(
     ci VARCHAR(8) NOT NULL ,
     nombre VARCHAR(20) NOT NULL ,
     apellido VARCHAR(20) NOT NULL ,
-    fecha_nacimiento DATETIME,
+    fecha_nacimiento DATE,
     telefono_contacto INT,
     PRIMARY KEY (ci)
 );

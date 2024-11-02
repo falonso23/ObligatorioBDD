@@ -1,0 +1,76 @@
+# Ver más sobre ignorar archivos: https://help.github.com/articles/ignoring-files/
+
+# ==== BACKEND - Python (Flask) ====
+# Entornos virtuales de Python
+venv/
+env/
+.venv/
+.env
+
+# Archivos de configuración sensibles
+*.env
+config.py
+
+# Caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos de log de Python
+*.log
+
+# Archivos y carpetas de Flask
+instance/
+.mypy_cache/
+.pytest_cache/
+
+# Paquetes y dependencias
+*.egg-info/
+.eggs/
+.Python
+lib/
+lib64/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ==== FRONTEND - Node.js (React) ====
+# Dependencias de Node.js
+node_modules/
+.pnp
+.pnp.js
+
+# Archivos de compilación de producción
+/build
+
+# Archivos de cobertura de pruebas
+/coverage
+
+# Archivos de configuración sensibles de entorno de Node.js
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Archivos de depuración de npm y Yarn
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ==== ARCHIVOS GENERALES ====
+# Archivos de sistema y de caché
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración de IDEs y editores
+.vscode/
+.idea/
+*.swp
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# ==== DOCUMENTACIÓN ====
+# Archivos y carpetas generados por Sphinx para documentación
+docs/_build/
+docs/build/
