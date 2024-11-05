@@ -50,3 +50,29 @@ def delete_instructor():
     conn.commit()
     conn.close()
     return jsonify({'message': 'Instructor eliminado correctamente.'}), 200
+
+
+@instructor_bp.route('/<string:ci>', methods=['GET'])
+def get_instructor(ci):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("SELECT ci, nombre, apellido FROM Instructor WHERE ci = %s", (ci,))
+        instructor = cursor.fetchone()
+
+        if instructor is None:
+            return jsonify({'error': 'Instructor no encontrado'}), 404
+
+        instructor_data = {
+            'ci': instructor[0],
+            'nombre': instructor[1],
+            'apellido': instructor[2]
+        }
+
+        return jsonify(instructor_data), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        # Cerrar la conexión
+        conn.close()
