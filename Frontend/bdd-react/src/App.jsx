@@ -1,15 +1,15 @@
-/* eslint-disable no-unused-vars */
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './Pages/Home';
-import CourseDetails from './Pages/CourseDetails';
+import Home from './Components/Home/Home';
+import ActividadDetails from './Components/ActividadDetails/ActividadDetails';
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/curso/:id" element={<CourseDetails />} />
+        <Route path="/actividad/:id" element={<ActividadDetails />} />
       </Routes>
     </Router>
   );

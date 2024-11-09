@@ -1,6 +1,6 @@
-/* eslint-disable no-unused-vars */
+
 import React, { useState } from 'react';
-import { addInstructor } from '../api';
+import { addInstructor } from '../../api';
 
 export const InstructorForm = () => {
     const [instructor, setInstructor] = useState({ ci: '', nombre: '', apellido: '' });
