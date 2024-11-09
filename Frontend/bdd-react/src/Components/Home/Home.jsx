@@ -50,7 +50,7 @@ export const Home = () => {
             }
             onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
           >
-            <h3>{actividad.descripcion}</h3>
+            <h3>{actividad.nombre}</h3>
           </div>
         ))}
       </div>

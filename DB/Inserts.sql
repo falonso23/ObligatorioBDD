@@ -1,8 +1,8 @@
 -- Insertar actividades
-INSERT INTO Actividad (id, descripcion, costo) VALUES
-('ACT-00001', 'Snowboard', 100),
-('ACT-00002', 'Ski', 120),
-('ACT-00003', 'Moto de nieve', 150);
+INSERT INTO Actividad (id, nombre, descripcion, costo, url_imagen) VALUES
+('ACT-00001', 'Snowboard','Curso de snowboard en montaña', 1000, 'https://cdn-ifojl.nitrocdn.com/ANiDeSRZZOHPszPMVuTuufMeyUOvgFnV/assets/images/optimized/rev-57fd0ce/clubnoroeste.com/wp-content/uploads/2020/04/ropa-snowboard.jpg'),
+('ACT-00002', 'Ski', 'Curso de ski nivel 1', 1200, 'https://hakubaskiconcierge.com/wp-content/uploads/Spring-Skiing-in-Hakuba-Happo-One-Moguls-scaled-e1701239259402-1200x1463.jpg'),
+('ACT-00003', 'Moto de nieve','Clase de manejo de moto de nieve', 1500, 'https://www.zigzagtravel.com.ar/entity/zigzag/images/Product/115/large/sq_dsc_5540.jpg');
 
 -- Insertar turnos
 INSERT INTO Turno (id, hora_inicio, hora_fin) VALUES

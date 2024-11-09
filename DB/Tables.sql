@@ -8,8 +8,10 @@ CREATE TABLE Login(
 
 CREATE TABLE Actividad(
     id VARCHAR(15) NOT NULL ,
-    descripcion VARCHAR(200),
+    nombre VARCHAR(32),
+    descripcion VARCHAR(255),
     costo INT,
+    url_imagen VARCHAR(512),
     PRIMARY KEY (id)
 );
 

@@ -18,7 +18,8 @@ export const CourseDetails = () => {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h1>{actividad.descripcion}</h1>
+      <h1>{actividad.nombre}</h1>
+      <p>{actividad.descripcion}</p>
       <p>{actividad.costo}</p>
     </div>
   );

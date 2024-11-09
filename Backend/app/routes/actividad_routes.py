@@ -7,7 +7,7 @@ actividad_bp = Blueprint('actividad', __name__, url_prefix='/actividad')
 def get_actividades():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM Actividad")
+    cursor.execute("SELECT id, nombre, descripcion, url_imagen FROM Actividad")
     actividades = cursor.fetchall()
     conn.close()
     return jsonify(actividades)
