@@ -3,6 +3,7 @@ from db import get_db_connection
 
 instructor_bp = Blueprint('instructor', __name__, url_prefix='/instructor')
 
+#Obtener todos los instructores
 @instructor_bp.route('/', methods=['GET'])
 def get_instructores():
     conn = get_db_connection()
@@ -12,6 +13,7 @@ def get_instructores():
     conn.close()
     return jsonify(instructores)
 
+#Agregar instructor a la base de datos
 @instructor_bp.route('/', methods=['POST'])
 def add_instructor():
     data = request.get_json()
@@ -33,7 +35,8 @@ def add_instructor():
         return jsonify({'error': str(e)}), 500
     finally:
         conn.close()
-    
+
+#Eliminar Instructor de la base de datos
 @instructor_bp.route('/', methods=['DELETE'])
 def delete_instructor():
     data = request.get_json()
@@ -52,6 +55,7 @@ def delete_instructor():
     return jsonify({'message': 'Instructor eliminado correctamente.'}), 200
 
 
+#Obtener por ci un Instructor
 @instructor_bp.route('/<string:ci>', methods=['GET'])
 def get_instructor(ci):
     conn = get_db_connection()
@@ -75,4 +79,35 @@ def get_instructor(ci):
         return jsonify({'error': str(e)}), 500
     finally:
         # Cerrar la conexión
+        conn.close()
+
+#Actualizar un alumno existente
+@instructor_bp.route('/<string:ci>', methods=['PUT'])
+def update_instructor(ci):
+    data = request.get_json()
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        # Verificar si el alumno existe
+        cursor.execute("SELECT * FROM Instructor WHERE ci = %s", (ci,))
+        alumno = cursor.fetchone()
+
+        if alumno is None:
+            return jsonify({'error': 'Instructor no encontrado'}), 404
+
+        # Actualizar los datos del alumno
+        cursor.execute(
+            "UPDATE Instructor SET nombre = %s, apellido = %s WHERE ci = %s",
+            (data.get('nombre', alumno[1]),
+             data.get('apellido', alumno[2]),
+             ci)
+        )
+        conn.commit()
+        return jsonify({'message': 'Instructor actualizado correctamente.'}), 200
+    except Exception as e:
+        conn.rollback() #Si existe algun error, revierte todo cambio que se haya hecho en esta query y deja como estaba antes.
+        return jsonify({'error': str(e)}), 500
+    finally:
         conn.close()
