@@ -5,3 +5,9 @@ body {
   --ucu-secondary-color: #767276;
   --ucu-font-family: "Asap", sans-serif;
 }
+
+h1 {
+  font-family: var(--ucu-font-family);
+  color: var(--ucu-primary-color);
+  text-transform: uppercase; 
+}
