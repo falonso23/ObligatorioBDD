@@ -11,6 +11,7 @@ import CardActionArea from "@mui/material/CardActionArea";
 import Grid from "@mui/material/Grid2";
 
 import { ReportsList } from "../Report/Report";
+import image_placeholder from "../../assets/image_placeholder.jpg"
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ export const Home = () => {
                 <CardMedia
                   component="img"
                   height="240"
-                  image={actividad.url_imagen}
+                  image={actividad.url_imagen ? actividad.url_imagen : image_placeholder}
                   alt={actividad.descripcion}
                 />
                 <CardContent>
