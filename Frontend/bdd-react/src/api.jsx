@@ -14,3 +14,7 @@ export const getActividades = () => axios.get(`${API_URL}/actividad`);
 
 export const addTurno = (turno) => axios.post(`${API_URL}/turnos`, turno);
 export const getTurnos = () => axios.get(`${API_URL}/turnos`);
+
+export const getReportActividadIngresos = () => axios.get(`${API_URL}/reporte/actividades_ingresos`);
+export const getReportActividadAlumnos = () => axios.get(`${API_URL}/reporte/actividades_alumnos`);
+export const getReportTurnosConMasClases = () => axios.get(`${API_URL}/reporte/turnos_clases`);

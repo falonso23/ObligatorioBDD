@@ -8,8 +8,9 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
-
 import Grid from "@mui/material/Grid2";
+
+import { ReportsList } from "../Report/Report";
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -17,6 +18,10 @@ export const Home = () => {
 
   const handleClickActividad = (id) => {
     navigate(`/actividad/${id}`);
+  };
+
+  const handleClickReport = (id) => {
+    navigate(`/report/${id}`);
   };
 
   useEffect(() => {
@@ -31,12 +36,14 @@ export const Home = () => {
   return (
     <div className="home_container">
       <h1>BIENVENIDO A LA ESCUELA UCU DE DEPORTES DE NIEVE</h1>
-      <h3>Seleccione una actividad para continuar</h3>
+      <h3>SELECCIONE UNA ACTIVIDAD</h3>
       <Grid container spacing={3} justifyContent="center">
         {actividades.map((actividad) => (
-          <Grid item xs={12}  key={actividad.id}>
-            <Card sx={{ width: 345 }}
-            onClick={() => handleClickActividad(actividad.id)}>
+          <Grid item xs={12} key={actividad.id}>
+            <Card
+              sx={{ width: 345 }}
+              onClick={() => handleClickActividad(actividad.id)}
+            >
               <CardActionArea>
                 <CardMedia
                   component="img"
@@ -57,8 +64,26 @@ export const Home = () => {
           </Grid>
         ))}
       </Grid>
+	  <br/>
+	  <h3>SELECCIONE UN REPORTE</h3>
+	  <br/>
+      <Grid container spacing={3} justifyContent="center">
+        {ReportsList.map((report) => (
+          <Grid item xs={12} key={report.id}>
+            <Card sx={{ width: 345 }} onClick={() => handleClickReport(report.id)}>
+				<CardActionArea>
+              <CardContent>
+                <Typography  variant="body1"  component="div">
+                  {report.name}
+                </Typography>
+              </CardContent>
+				</CardActionArea>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
     </div>
-    );
+  );
 };
 
 export default Home;
