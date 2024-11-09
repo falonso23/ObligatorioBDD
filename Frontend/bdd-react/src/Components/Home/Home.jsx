@@ -1,6 +1,15 @@
-import React, {useEffect, useState} from "react";
+import "./Home.css";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {getActividades} from "../../api"
+import { getActividades } from "../../api";
+
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import CardActionArea from "@mui/material/CardActionArea";
+
+import Grid from "@mui/material/Grid2";
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -11,51 +20,45 @@ export const Home = () => {
   };
 
   useEffect(() => {
-	const fetchCourses = async () => {
-		const response = await getActividades();
-		setActividades(response.data)
-		console.log('Actividades: ', response)
-	}
-	fetchCourses();
-  }, [])
+    const fetchCourses = async () => {
+      const response = await getActividades();
+      setActividades(response.data);
+      console.log("Actividades: ", response);
+    };
+    fetchCourses();
+  }, []);
 
   return (
-    <div style={{ alignItems: "center", textAlign: "center" }}>
-      <h1>Bienvenido a la Escuela UCU de Nieve</h1>
-      <p>Selecciona una actividad:</p>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "20px",
-          flexWrap: "wrap",
-        }}
-      >
+    <div className="home_container">
+      <h1>BIENVENIDO A LA ESCUELA UCU DE DEPORTES DE NIEVE</h1>
+      <h3>Seleccione una actividad para continuar</h3>
+      <Grid container spacing={3} justifyContent="center">
         {actividades.map((actividad) => (
-          <div
-            key={actividad.id}
-            onClick={() => handleClickActividad(actividad.id)}
-            style={{
-              border: "1px solid #ccc",
-              padding: "20px",
-              borderRadius: "8px",
-              width: "150px",
-              textAlign: "center",
-              cursor: "pointer",
-              transition: "all 0.3s ease",
-            }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.boxShadow =
-                "0px 4px 8px rgba(0, 0, 0, 0.2)")
-            }
-            onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
-          >
-            <h3>{actividad.nombre}</h3>
-          </div>
+          <Grid item xs={12}  key={actividad.id}>
+            <Card sx={{ width: 345 }}
+            onClick={() => handleClickActividad(actividad.id)}>
+              <CardActionArea>
+                <CardMedia
+                  component="img"
+                  height="240"
+                  image={actividad.url_imagen}
+                  alt={actividad.descripcion}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {actividad.nombre}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    {actividad.descripcion}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Grid>
         ))}
-      </div>
+      </Grid>
     </div>
-  );
+    );
 };
 
 export default Home;
