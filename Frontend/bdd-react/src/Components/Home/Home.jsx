@@ -36,8 +36,8 @@ export const Home = () => {
 
   return (
     <div className="home_container">
-      <h1>BIENVENIDO A LA ESCUELA UCU DE DEPORTES DE NIEVE</h1>
-      <h3>SELECCIONE UNA ACTIVIDAD</h3>
+      <h1>ESCUELA UCU DE DEPORTES DE NIEVE</h1>
+      <h3>ACTIVIDADES</h3>
       <Grid container spacing={3} justifyContent="center">
         {actividades.map((actividad) => (
           <Grid item xs={12} key={actividad.id}>
@@ -66,8 +66,7 @@ export const Home = () => {
         ))}
       </Grid>
 	  <br/>
-	  <h3>SELECCIONE UN REPORTE</h3>
-	  <br/>
+	  <h3>REPORTES</h3>
       <Grid container spacing={3} justifyContent="center">
         {ReportsList.map((report) => (
           <Grid item xs={12} key={report.id}>
