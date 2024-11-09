@@ -26,17 +26,17 @@ INSERT INTO Equipamiento (id, id_actividad, descripcion, costo) VALUES
 ('EQU-00006', 'ACT-00003', 'Guantes de moto de nieve', 25);
 
 -- Insertar alumnos
-INSERT INTO Alumno (ci, nombre, apellido, fecha_nacimiento, telefono_contacto) VALUES
-('45678901', 'Juan', 'Gomez', '2000-05-12', '987654321'),
-('56789012', 'Maria', 'Rodriguez', '1998-11-25', '123456789'),
-('67890123', 'Pedro', 'Sanchez', '2002-02-18', '555666777'),
-('78901234', 'Lucia', 'Martinez', '2001-03-15', '987123456'),
-('89012345', 'Miguel', 'Diaz', '1999-09-10', '654321789'),
-('90123456', 'Sofia', 'Perez', '2003-07-21', '321654987'),
-('12345670', 'Carlos', 'Lopez', '1997-08-30', '147258369'),
-('23456781', 'Ana', 'Gimenez', '2001-11-11', '963852741'),
-('34567892', 'Pablo', 'Fernandez', '2000-06-16', '789456123'),
-('45678903', 'Laura', 'Suarez', '1998-12-04', '852369741');
+INSERT INTO Alumno (ci, nombre, apellido, fecha_nacimiento,correo_electronico ,telefono) VALUES
+('45678901', 'Juan', 'Gomez', '2000-05-12','juan@gmail.com' ,'987654321'),
+('56789012', 'Maria', 'Rodriguez', '1998-11-25', 'maria@gmail.com','123456789'),
+('67890123', 'Pedro', 'Sanchez', '2002-02-18', 'pedro@gmail.com','555666777'),
+('78901234', 'Lucia', 'Martinez', '2001-03-15', 'lucia@gmail.com','987123456'),
+('89012345', 'Miguel', 'Diaz', '1999-09-10', 'miguel@gmail.com','654321789'),
+('90123456', 'Sofia', 'Perez', '2003-07-21', 'carlos@gmail.com','321654987'),
+('12345670', 'Carlos', 'Lopez', '1997-08-30', 'ana@gmail.com','147258369'),
+('23456781', 'Ana', 'Gimenez', '2001-11-11', 'ana@gmail.com','963852741'),
+('34567892', 'Pablo', 'Fernandez', '2000-06-16', 'pablo@gmail.com','789456123'),
+('45678903', 'Laura', 'Suarez', '1998-12-04', 'laura@gmail.com','852369741');
 
 -- Insertar clases
 INSERT INTO Clase (id, ci_instructor, id_actividad, id_turno, dictada) VALUES

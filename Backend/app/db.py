@@ -5,7 +5,7 @@ DB_CONFIG = {
     'port': 3306,
     'database': 'ucu_escuela_de_nieve',
     'user': 'root',
-    'password': 'rootpassword'
+    'password': 'Pastoverde66.'
 }
 
 def get_db_connection():
