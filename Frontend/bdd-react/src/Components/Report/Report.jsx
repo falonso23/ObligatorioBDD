@@ -29,15 +29,13 @@ export const ReportsList = [
   },
 ];
 
-const paginationModel = { page: 0, pageSize: 5 };
-
-const formaColumnName = (name) => {
+const formatColumnName = (name) => {
 	return name.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
 
 const formatColumns = (data) => {
 	const colNames = Object.keys(data[0]).sort((a,b) => a > b ? 1 : -1);
-	const columns = colNames.map(name => {return {field: name, headerName: formaColumnName(name), flex: 1}})
+	const columns = colNames.map(name => {return {field: name, headerName: formatColumnName(name), flex: 1}})
 	return columns;
 }
 
@@ -62,7 +60,7 @@ const Report = () => {
     } else {
       console.error("Invalid report ID");
     }
-  }, [id]); // Incluye `id` en las dependencias para actualizar cuando cambie
+  }, [id]);
 
   if (!selectedReport) {
     return <h1>Reporte no encontrado</h1>;
@@ -73,14 +71,13 @@ const Report = () => {
       <div className="report_title">
         <h1>{selectedReport.name}</h1>
       </div>
-      <Paper sx={{ height: "80vh", width: '90%', margin: "0 auto" }}>
+      <Paper sx={{ height: "80vh", width: '100%', margin: "0 auto" }}  elevation={5} >
       <DataGrid
         rows={reportData}
         columns={columns}
-        initialState={{ pagination: { paginationModel } }}
-        pageSizeOptions={[10]}
         sx={{ border: 0 }}
 		getRowId={(row) => row.id ? row.id : row.ci} 
+		autoPageSize	
       />
     </Paper>
     </div>

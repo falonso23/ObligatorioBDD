@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from "./Components/Home/Home";
 import ActividadDetails from './Components/ActividadDetails/ActividadDetails';
 import Report from './Components/Report/Report';
-
+import "./App.css"
 function App() {
   return (
     <Router>
