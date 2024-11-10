@@ -34,7 +34,7 @@ const formatColumnName = (name) => {
 }
 
 const formatColumns = (data) => {
-	const colNames = Object.keys(data[0]).sort((a,b) => a > b ? 1 : -1);
+	const colNames = Object.keys(data[0]);
 	const columns = colNames.map(name => {return {field: name, headerName: formatColumnName(name), flex: 1}})
 	return columns;
 }
