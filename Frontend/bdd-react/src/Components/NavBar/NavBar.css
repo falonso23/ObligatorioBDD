@@ -1,0 +1,15 @@
+.navbar {
+    background-color: red;
+    color: white;
+    font-family: var(--ucu-font-family);
+}
+  
+.navbar-title {
+    font-family: var(--ucu-font-family) !important;
+}
+  
+.navbar-link {
+    color: inherit;
+    text-decoration: none;
+}
+  

@@ -11,3 +11,11 @@ h1 {
   color: var(--ucu-primary-color);
   text-transform: uppercase; 
 }
+
+
+.page-title {
+  font-family: var(--ucu-font-family);
+  color: var(--ucu-primary-color);
+  text-transform: uppercase; 
+  text-align: center;
+}
