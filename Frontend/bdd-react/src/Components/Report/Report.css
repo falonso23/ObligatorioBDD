@@ -1,7 +1,10 @@
-.report_title {
+.report_container {
     margin: 0 auto;
     width: 80%;
     align-items: center;
+}
+
+.report_title {
     text-align: center;
     font-family: var(--ucu-font-family);
     color: var(--ucu-primary-color);
