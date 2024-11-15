@@ -31,10 +31,10 @@ const NavBar = () => {
         <Button color="inherit" component={Link} to="/actividades" sx={{ fontFamily: 'var(--ucu-font-family)' }}>
         Actividades
         </Button>
-        <Button color="inherit" component={Link} to="/list/alumnos" sx={{ fontFamily: 'var(--ucu-font-family)' }}>
+        <Button color="inherit" component={Link} to="/alumnos" sx={{ fontFamily: 'var(--ucu-font-family)' }}>
         Alumnos
         </Button>
-        <Button color="inherit" component={Link} to="/list/clases" sx={{ fontFamily: 'var(--ucu-font-family)' }}>
+        <Button color="inherit" component={Link} to="/clases" sx={{ fontFamily: 'var(--ucu-font-family)' }}>
         Clases
         </Button>
         <Button color="inherit" component={Link} to="/reportes" sx={{ fontFamily: 'var(--ucu-font-family)' }}>

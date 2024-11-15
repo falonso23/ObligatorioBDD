@@ -32,7 +32,7 @@ def get_clases():
         conn.close()
 
 # 2. Obtener una clase por ID
-@clases_bp('/<int:id>', methods=['GET'])
+@clases_bp.route('/<int:id>', methods=['GET'])
 def get_clase(id):
     conn = get_db_connection()
     cursor = conn.cursor()

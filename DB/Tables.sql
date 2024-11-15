@@ -43,7 +43,7 @@ CREATE TABLE Alumno(
     nombre VARCHAR(20) NOT NULL ,
     apellido VARCHAR(20) NOT NULL ,
     fecha_nacimiento DATE,
-    telefono_contacto INT,
+    telefono_contacto VARCHAR(20),
     PRIMARY KEY (ci)
 );
 
@@ -64,6 +64,6 @@ CREATE TABLE Alumno_Clase(
     ci_alumno VARCHAR(8) NOT NULL,
     id_equipamiento VARCHAR(15) NOT NULL,
     PRIMARY KEY (id_clase, ci_alumno),
-    FOREIGN KEY (ci_alumno) REFERENCES Alumno (ci),
-    FOREIGN KEY (id_equipamiento) REFERENCES Equipamiento (id)
+    FOREIGN KEY (ci_alumno) REFERENCES Alumno(ci) ON DELETE CASCADE,
+    FOREIGN KEY (id_equipamiento) REFERENCES Equipamiento(id) ON DELETE CASCADE
 );
