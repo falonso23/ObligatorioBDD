@@ -96,6 +96,7 @@ function GenericDetails({
         <TextField
           key={field.name}
           required={field.required}
+          multiline={field.multiline}
           label={field.label}
           name={field.name}
           type={field.type || "text"}

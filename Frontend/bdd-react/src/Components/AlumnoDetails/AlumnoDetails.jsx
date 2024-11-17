@@ -14,7 +14,7 @@ function AlumnoDetails() {
   console.log("Mode: ", mode, id)
 
   const fields = [
-    { name: "ci", label: "CI", type: "number", required: true, disabled: false, maxLength: 8},
+    { name: "ci", label: "CI", type: "number", required: true, disabled: mode !== "create", maxLength: 8},
     { name: "nombre", label: "Nombre", required: true, maxLength: 20 },
     { name: "apellido", label: "Apellido", required: true, maxLength: 20 },
     { name: "telefono_contacto", label: "Teléfono de Contacto", type: "number", maxLength: 9},
@@ -24,12 +24,7 @@ function AlumnoDetails() {
   return (
     <GenericDetails
       fetchItem={getAlumnoByCi}
-      saveItem={(data, ci) => {
-
-        console.log('Save Item:', ci, data);
-        return mode === "edit" ? updateAlumno(ci, data) : addAlumno(data)
-      }
-      }
+      saveItem={(data, ci) => mode === "edit" ? updateAlumno(ci, data) : addAlumno(data)}
       deleteItem={deleteAlumnoByCi}
       fields={fields}
       entityName="Alumno"

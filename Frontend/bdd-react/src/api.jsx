@@ -2,10 +2,6 @@ import axios from 'axios';
 
 const API_URL = 'http://127.0.0.1:5000'; 
 
-// --- Instructor Endpoints ---
-export const addInstructor = (instructor) => axios.post(`${API_URL}/instructor`, instructor);
-export const getInstructores = () => axios.get(`${API_URL}/instructor`);
-
 // --- Alumno Endpoints ---
 export const addAlumno = (alumno) => axios.post(`${API_URL}/alumno/`, alumno);
 export const updateAlumno = (ci, alumno) => axios.put(`${API_URL}/alumno/${ci}`, alumno);
@@ -30,6 +26,20 @@ export const getReportTurnosConMasClases = () => axios.get(`${API_URL}/reporte/t
 // --- Clase Endpoints ---
 export const getClases = () => axios.get(`${API_URL}/clase`);
 export const getClaseById = (id) => axios.get(`${API_URL}/clase/${id}`);
-export const deleteClaseById = (id) => axios.delete(`${API_URL}/clase/${id}`)};
+export const deleteClaseById = (id) => axios.delete(`${API_URL}/clase/${id}`);
 export const addClase = (clase) => axios.post(`${API_URL}/clase/`, clase);
 export const updateClase = (id, clase) => axios.put(`${API_URL}/clase/${id}`, clase);
+
+// --- Instructor Endpoints ---
+export const addInstructor = (instructor) => axios.post(`${API_URL}/instructor/`, instructor);
+export const updateInstructor = (ci, instructor) => axios.put(`${API_URL}/instructor/${ci}`, instructor);
+export const getInstructores = () => axios.get(`${API_URL}/instructor`);
+export const getInstructorByCi = (ci) => axios.get(`${API_URL}/instructor/${ci}`);
+export const deleteInstructorByCi = (ci) => axios.delete(`${API_URL}/instructor/${ci}`);
+
+// --- Equipamiento Endpoints ---
+export const addEquipamiento = (equipamiento) => axios.post(`${API_URL}/equipamiento/`, equipamiento);
+export const updateEquipamiento = (ci, equipamiento) => axios.put(`${API_URL}/equipamiento/${ci}`, equipamiento);
+export const getEquipamientos = () => axios.get(`${API_URL}/equipamiento`);
+export const getEquipamientoByCi = (ci) => axios.get(`${API_URL}/equipamiento/${ci}`);
+export const deleteEquipamientoById = (ci) => axios.delete(`${API_URL}/equipamiento/${ci}`);

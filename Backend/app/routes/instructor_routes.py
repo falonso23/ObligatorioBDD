@@ -34,11 +34,8 @@ def add_instructor():
     finally:
         conn.close()
     
-@instructor_bp.route('/', methods=['DELETE'])
-def delete_instructor():
-    data = request.get_json()
-    ci = data.get('ci')
-
+@instructor_bp.route('/<string:ci>', methods=['DELETE'])
+def delete_instructor(ci):
     if not ci:
         return jsonify({'error': 'Se requiere el campo ci para eliminar un instructor.'}), 400
 
@@ -75,4 +72,31 @@ def get_instructor(ci):
         return jsonify({'error': str(e)}), 500
     finally:
         # Cerrar la conexión
+        conn.close()
+
+
+@instructor_bp.route("/<string:ci>", methods=['PUT'])
+def update_instructor(ci):
+    data = request.get_json() 
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("""
+            UPDATE Instructor
+            SET nombre = %s, apellido = %s
+            WHERE ci = %s
+        """, (data['nombre'], data['apellido'], ci))
+
+        if cursor.rowcount == 0:
+            conn.rollback() 
+            return jsonify({'error': 'Instructor not encontrado'}), 404
+
+        conn.commit()
+        return jsonify({'message': 'Instructor actualizado'}), 200
+    
+    except Exception as e:
+        conn.rollback()
+        return jsonify({'error': f'Error editando Instructor: {str(e)}'}), 500
+    
+    finally:
         conn.close()
