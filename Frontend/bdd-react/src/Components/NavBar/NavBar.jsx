@@ -40,6 +40,9 @@ const NavBar = () => {
         <Button color="inherit" component={Link} to="/instructores" sx={{ fontFamily: 'var(--ucu-font-family)' }}>
         Instructores
         </Button>
+        <Button color="inherit" component={Link} to="/turnos" sx={{ fontFamily: 'var(--ucu-font-family)' }}>
+        Turnos
+        </Button>
         <Button color="inherit" component={Link} to="/equipamientos" sx={{ fontFamily: 'var(--ucu-font-family)' }}>
         Equipamientos
         </Button>

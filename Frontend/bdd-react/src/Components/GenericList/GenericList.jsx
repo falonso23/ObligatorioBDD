@@ -21,6 +21,7 @@ function GenericList({
   createPath,
   editPath,
   viewPath,
+  isViewOnly = false, // Nuevo prop para modo view-only
 }) {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
@@ -29,30 +30,38 @@ function GenericList({
   const navigate = useNavigate();
 
   const handleEdit = (row) => {
-    navigate(`${editPath}/${ getRowId(row)}`);
+    if (!isViewOnly) {
+      navigate(`${editPath}/${getRowId(row)}`);
+    }
   };
 
   const handleView = (row) => {
-    navigate(`${viewPath}/${ getRowId(row)}`);
+    navigate(`${viewPath}/${getRowId(row)}`);
   };
 
   const handleDelete = async () => {
-    try {
-      await deleteItem(selectedItemId);
-      window.alert(`${entityName} eliminado correctamente`);
-      setRows((prev) => prev.filter((item) => getRowId(item) !== selectedItemId));
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.error || `Error al eliminar ${entityName}`;
-      window.alert(errorMessage);
-    } finally {
-      setOpenDialog(false);
-      setSelectedItemId(null);
+    if (!isViewOnly) {
+      try {
+        await deleteItem(selectedItemId);
+        window.alert(`${entityName} eliminado correctamente`);
+        setRows((prev) =>
+          prev.filter((item) => getRowId(item) !== selectedItemId)
+        );
+      } catch (error) {
+        const errorMessage =
+          error.response?.data?.error || `Error al eliminar ${entityName}`;
+        window.alert(errorMessage);
+      } finally {
+        setOpenDialog(false);
+        setSelectedItemId(null);
+      }
     }
   };
 
   const handleNew = () => {
-    navigate(createPath);
+    if (!isViewOnly) {
+      navigate(createPath);
+    }
   };
 
   useEffect(() => {
@@ -71,18 +80,25 @@ function GenericList({
               <IconButton color="primary" onClick={() => handleView(params.row)}>
                 <VisibilityIcon />
               </IconButton>
-              <IconButton color="primary" onClick={() => handleEdit(params.row)}>
-                <EditIcon />
-              </IconButton>
-              <IconButton
-                color="secondary"
-                onClick={() => {
-                  setSelectedItemId(getRowId(params.row));
-                  setOpenDialog(true);
-                }}
-              >
-                <DeleteIcon />
-              </IconButton>
+              {!isViewOnly && (
+                <>
+                  <IconButton
+                    color="primary"
+                    onClick={() => handleEdit(params.row)}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton
+                    color="secondary"
+                    onClick={() => {
+                      setSelectedItemId(getRowId(params.row));
+                      setOpenDialog(true);
+                    }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </>
+              )}
             </div>
           ),
         };
@@ -98,25 +114,27 @@ function GenericList({
       }
     };
     fetchDataAsync();
-  }, [fetchData, baseColumns, entityName, getRowId]);
+  }, [fetchData, baseColumns, entityName, getRowId, isViewOnly]);
 
   return (
     <div className="report_container">
       <div className="header">
         <h1 className="page-title">{entityName}</h1>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={handleNew}
-          sx={{
-            backgroundColor: "var(--ucu-primary-color)",
-            color: "white",
-            fontFamily: "var(--ucu-font-family)",
-            margin: "10px",
-          }}
-        >
-          Nuevo
-        </Button>
+        {!isViewOnly && (
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={handleNew}
+            sx={{
+              backgroundColor: "var(--ucu-primary-color)",
+              color: "white",
+              fontFamily: "var(--ucu-font-family)",
+              margin: "10px",
+            }}
+          >
+            Nuevo
+          </Button>
+        )}
       </div>
       <Paper
         sx={{ height: "80vh", width: "100%", margin: "0 auto" }}
@@ -130,13 +148,15 @@ function GenericList({
           autoPageSize
         />
       </Paper>
-      <DeleteDialog
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
-        onConfirm={handleDelete}
-        title="Confirmar"
-        message={`¿Estás seguro de que deseas eliminar este ${entityName.toLowerCase()}?`}
-      />
+      {!isViewOnly && (
+        <DeleteDialog
+          open={openDialog}
+          onClose={() => setOpenDialog(false)}
+          onConfirm={handleDelete}
+          title="Confirmar"
+          message={`¿Estás seguro de que deseas eliminar este ${entityName.toLowerCase()}?`}
+        />
+      )}
     </div>
   );
 }

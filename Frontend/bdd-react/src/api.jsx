@@ -15,8 +15,8 @@ export const getActividad = (id) => axios.get(`${API_URL}/actividad/${id}`);
 export const getActividades = () => axios.get(`${API_URL}/actividad`);
 
 // --- Turno Endpoints ---
-export const addTurno = (turno) => axios.post(`${API_URL}/turnos`, turno);
-export const getTurnos = () => axios.get(`${API_URL}/turnos`);
+export const getTurnos = () => axios.get(`${API_URL}/turno`);
+export const getTurnoById = (id) => axios.get(`${API_URL}/turno/${id}`);
 
 // --- Reportes Endpoints ---
 export const getReportActividadIngresos = () => axios.get(`${API_URL}/reporte/actividades_ingresos`);

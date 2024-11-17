@@ -4,7 +4,20 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+import Switch from "@mui/material/Switch";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import DeleteDialog from "../DeleteDialog/DeleteDialog";
+
+const formatTimeToInput = (timeString) => {
+  if (!timeString) return "";
+  const [hours, minutes] = timeString.split(":");
+  return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
+};
+
+const formatTimeForBackend = (timeString) => {
+  if (!timeString) return "";
+  return timeString.length === 5 ? `${timeString}:00` : timeString;
+};
 
 function GenericDetails({
   fetchItem,
@@ -13,44 +26,53 @@ function GenericDetails({
   fields,
   entityName,
   redirectPath,
+  isViewOnly = false,
 }) {
   const [openDialog, setOpenDialog] = useState(false);
   const { mode, id } = useParams();
   const navigate = useNavigate();
+  const effectiveMode = isViewOnly ? "view" : mode;
 
   const [item, setItem] = useState(() =>
     fields.reduce((acc, field) => {
-      acc[field.name] = field.defaultValue || "";
+      acc[field.name] = field.defaultValue || (field.type === "boolean" ? false : "");
       return acc;
     }, {})
   );
 
   useEffect(() => {
-    if (mode !== "create" && id) {
+    if (effectiveMode !== "create" && id) {
       const fetchData = async () => {
         try {
           const response = await fetchItem(id);
-          setItem(response.data);
+          const formattedData = { ...response.data };
+
+          // Formatear valores de tipo "time"
+          fields.forEach((field) => {
+            if (field.type === "time" && formattedData[field.name]) {
+              formattedData[field.name] = formatTimeToInput(formattedData[field.name]);
+            }
+          });
+
+          setItem(formattedData);
         } catch (error) {
           console.error(`Error fetching ${entityName}:`, error);
         }
       };
       fetchData();
     }
-  }, [id, mode, fetchItem, entityName]);
+  }, [id, effectiveMode, fetchItem, entityName, fields]);
 
   const handleChange = (e, field) => {
-    const { name, value } = e.target;
+    const { name, value, checked } = e.target;
 
-    // Validar longitud máxima para campos tipo "number"
-    if (field.type === "number" && field.maxLength) {
-      if (value.length > field.maxLength) {
-        return; // Ignorar valores más largos
-      }
+    let updatedValue = value;
+
+    if (field.type === "boolean") {
+      updatedValue = checked;
     }
 
-    // Actualizar el estado
-    setItem((prev) => ({ ...prev, [name]: value }));
+    setItem((prev) => ({ ...prev, [name]: updatedValue }));
   };
 
   const handleDelete = async () => {
@@ -68,11 +90,20 @@ function GenericDetails({
 
   const handleSave = async () => {
     try {
-      if (mode === "create") {
-        await saveItem(item);
+      const formattedItem = { ...item };
+
+      // Convertir valores de tipo "time" para el backend
+      fields.forEach((field) => {
+        if (field.type === "time" && formattedItem[field.name]) {
+          formattedItem[field.name] = formatTimeForBackend(formattedItem[field.name]);
+        }
+      });
+
+      if (effectiveMode === "create") {
+        await saveItem(formattedItem);
         window.alert(`${entityName} creado correctamente`);
-      } else if (mode === "edit") {
-        await saveItem(item, id);
+      } else if (effectiveMode === "edit") {
+        await saveItem(formattedItem, id);
         window.alert(`${entityName} actualizado correctamente`);
       }
       navigate(redirectPath);
@@ -85,38 +116,47 @@ function GenericDetails({
   return (
     <Paper elevation={3} sx={{ padding: 4, maxWidth: 600, margin: "20px auto" }}>
       <Typography variant="h4" gutterBottom>
-        {mode === "create"
+        {effectiveMode === "create"
           ? `Crear ${entityName}`
-          : mode === "edit"
+          : effectiveMode === "edit"
           ? `Editar ${entityName}`
           : `Detalles de ${entityName}`}
       </Typography>
 
-      {fields.map((field) => (
-        <TextField
-          key={field.name}
-          required={field.required}
-          multiline={field.multiline}
-          label={field.label}
-          name={field.name}
-          type={field.type || "text"}
-          value={item[field.name]}
-          onChange={(e) => handleChange(e, field)} // Pasar el campo para validar
-          fullWidth
-          margin="normal"
-          disabled={mode === "view" || field.disabled}
-          InputLabelProps={field.type === "date" ? { shrink: true } : undefined}
-          inputProps={
-            field.type === "number"
-              ? { inputMode: "numeric", pattern: "[0-9]*" } // Para UX en dispositivos móviles
-              : field.maxLength
-              ? { maxLength: field.maxLength } // Para otros tipos
-              : {}
-          }
-        />
-      ))}
+      {fields.map((field) =>
+        field.type === "boolean" ? (
+          <FormControlLabel
+            key={field.name}
+            control={
+              <Switch
+                checked={item[field.name] || false}
+                name={field.name}
+                onChange={(e) => handleChange(e, field)}
+                disabled={effectiveMode === "view"}
+              />
+            }
+            label={field.label}
+          />
+        ) : (
+          <TextField
+            key={field.name}
+            required={field.required}
+            label={field.label}
+            name={field.name}
+            type={field.type || "text"}
+            value={item[field.name] || ""}
+            onChange={(e) => handleChange(e, field)}
+            fullWidth
+            margin="normal"
+            disabled={effectiveMode === "view" || field.disabled}
+            multiline={field.multiline || false}
+            rows={field.multiline ? 4 : undefined}
+            InputLabelProps={field.type === "date" || field.type === "time" ? { shrink: true } : undefined}
+          />
+        )
+      )}
 
-      {mode !== "view" && (
+      {effectiveMode !== "view" && !isViewOnly && (
         <Button
           variant="contained"
           color="primary"
@@ -127,7 +167,7 @@ function GenericDetails({
         </Button>
       )}
 
-      {mode === "view" && (
+      {effectiveMode === "view" && !isViewOnly && (
         <>
           <Button
             variant="contained"
@@ -147,6 +187,7 @@ function GenericDetails({
           </Button>
         </>
       )}
+
       <Button
         variant="outlined"
         onClick={() => navigate(redirectPath)}

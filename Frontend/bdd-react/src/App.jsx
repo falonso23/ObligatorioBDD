@@ -20,6 +20,8 @@ import InstructorDetails from './Components/InstructorDetails/InstructorDetails'
 import "./App.css"
 import EquipamientoDetails from './Components/EquipamientoDetails/EquipamientoDetails';
 import EquipamientosList from './Components/EquipamientosList/EquipamientosList';
+import TurnoDetails from './Components/TurnoDetails/TurnoDetails';
+import TurnosList from './Components/TurnosList/TurnosList';
 function App() {
   return (
     <Router>
@@ -34,6 +36,7 @@ function App() {
         <Route path="/clases/" element={<ClasesList />} />
         <Route path="/instructores/" element={<InstructoresList />} />
         <Route path="/equipamientos/" element={<EquipamientosList />} />
+        <Route path="/turnos/" element={<TurnosList />} />
 
         {/* Actividad */}
         <Route path="/actividad/:id" element={<ActividadDetails />} />
@@ -56,6 +59,9 @@ function App() {
         {/* Equipamientos */}
         <Route path="/equipamiento/:mode" element={<EquipamientoDetails />} />
         <Route path="/equipamiento/:mode/:id" element={<EquipamientoDetails />} />  
+
+        {/* Turnos */}
+        <Route path="/turno/:mode/:id" element={<TurnoDetails />} />  
       </Routes>
     </Router>
   );

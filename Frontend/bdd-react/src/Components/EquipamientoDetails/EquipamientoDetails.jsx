@@ -14,8 +14,8 @@ function EquipamientoDetails() {
 
   const fields = [
     { name: "actividad", label: "Actividad", required: true, maxLength: 20 },
-    { name: "descripcion", label: "Descripcion", multiLine: true, maxLength: 200 },
-    { name: "costo", label: "Costo", maxLength: 9 }
+    { name: "descripcion", label: "Descripcion", multiline: true, maxLength: 200 },
+    { name: "costo", label: "Costo", maxLength: 9, type:"number" }
   ];
 
   return (
