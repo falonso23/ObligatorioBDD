@@ -8,10 +8,13 @@ import NavBar from './Components/NavBar/NavBar';
 import ActividadesList from './Components/ActividadesList/ActividadesList';
 import ReportesList from './Components/ReportesList/ReportesList';
 import AlumnosList from './Components/AlumnosList/AlumnosList';
+import ClasesList from './Components/ClasesList/ClasesList';
 
 import Report from './Components/Report/Report';
 import ActividadDetails from './Components/ActividadDetails/ActividadDetails';
 import AlumnoDetails from './Components/AlumnoDetails/AlumnoDetails';
+import ClaseDetails from './Components/ClaseDetails/ClaseDetails';
+
 import "./App.css"
 function App() {
   return (
@@ -24,14 +27,21 @@ function App() {
         <Route path="/actividades" element={<ActividadesList />} />
         <Route path="/reportes" element={<ReportesList />} />
         <Route path="/alumnos/" element={<AlumnosList />} />
+        <Route path="/clases/" element={<ClasesList />} />
 
-        {/* Details */}
+        {/* Actividad */}
         <Route path="/actividad/:id" element={<ActividadDetails />} />
+
+        {/* Reportes */}
         <Route path="/report/:id" element={<Report />} />
 
         {/* Alumno */}
         <Route path="/alumno/:mode" element={<AlumnoDetails />} />
         <Route path="/alumno/:mode/:id" element={<AlumnoDetails />} />  
+
+        {/* Clases */}
+        <Route path="/clase/:mode" element={<ClaseDetails />} />
+        <Route path="/clase/:mode/:id" element={<ClaseDetails />} />  
       </Routes>
     </Router>
   );

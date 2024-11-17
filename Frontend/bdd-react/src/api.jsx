@@ -29,3 +29,7 @@ export const getReportTurnosConMasClases = () => axios.get(`${API_URL}/reporte/t
 
 // --- Clase Endpoints ---
 export const getClases = () => axios.get(`${API_URL}/clase`);
+export const getClaseById = (id) => axios.get(`${API_URL}/clase/${id}`);
+export const deleteClaseById = (id) => axios.delete(`${API_URL}/clase/${id}`)};
+export const addClase = (clase) => axios.post(`${API_URL}/clase/`, clase);
+export const updateClase = (id, clase) => axios.put(`${API_URL}/clase/${id}`, clase);

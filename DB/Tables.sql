@@ -52,6 +52,7 @@ CREATE TABLE Clase(
     ci_instructor VARCHAR(8) NOT NULL,
     id_actividad VARCHAR(15) NOT NULL,
     id_turno VARCHAR(15) NOT NULL,
+    fecha DATE NOT NULL,
     dictada BOOL,
     PRIMARY KEY (id),
     FOREIGN KEY (ci_instructor) REFERENCES Instructor (ci),

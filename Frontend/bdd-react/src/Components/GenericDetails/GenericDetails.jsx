@@ -83,16 +83,13 @@ function GenericDetails({
   };
 
   return (
-    <Paper
-      elevation={3}
-      sx={{ padding: 4, maxWidth: 600, margin: "20px auto" }}
-    >
+    <Paper elevation={3} sx={{ padding: 4, maxWidth: 600, margin: "20px auto" }}>
       <Typography variant="h4" gutterBottom>
         {mode === "create"
           ? `Crear ${entityName}`
           : mode === "edit"
-            ? `Editar ${entityName}`
-            : `Detalles de ${entityName}`}
+          ? `Editar ${entityName}`
+          : `Detalles de ${entityName}`}
       </Typography>
 
       {fields.map((field) => (
@@ -103,17 +100,17 @@ function GenericDetails({
           name={field.name}
           type={field.type || "text"}
           value={item[field.name]}
-          onChange={(e) => handleChange(e, field)}
+          onChange={(e) => handleChange(e, field)} // Pasar el campo para validar
           fullWidth
           margin="normal"
           disabled={mode === "view" || field.disabled}
           InputLabelProps={field.type === "date" ? { shrink: true } : undefined}
           inputProps={
             field.type === "number"
-              ? { inputMode: "numeric", pattern: "[0-9]*" }
+              ? { inputMode: "numeric", pattern: "[0-9]*" } // Para UX en dispositivos móviles
               : field.maxLength
-                ? { maxLength: field.maxLength }
-                : {}
+              ? { maxLength: field.maxLength } // Para otros tipos
+              : {}
           }
         />
       ))}
