@@ -6,6 +6,10 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
 import DeleteDialog from "../DeleteDialog/DeleteDialog";
 
 const formatTimeToInput = (timeString) => {
@@ -40,6 +44,8 @@ function GenericDetails({
     }, {})
   );
 
+  const [options, setOptions] = useState({}); // Almacena las opciones dinámicas para selects
+
   useEffect(() => {
     if (effectiveMode !== "create" && id) {
       const fetchData = async () => {
@@ -47,7 +53,6 @@ function GenericDetails({
           const response = await fetchItem(id);
           const formattedData = { ...response.data };
 
-          // Formatear valores de tipo "time"
           fields.forEach((field) => {
             if (field.type === "time" && formattedData[field.name]) {
               formattedData[field.name] = formatTimeToInput(formattedData[field.name]);
@@ -62,6 +67,20 @@ function GenericDetails({
       fetchData();
     }
   }, [id, effectiveMode, fetchItem, entityName, fields]);
+
+  // Cargar opciones dinámicas para selects
+  useEffect(() => {
+    const loadOptionsAsync = async () => {
+      const loadedOptions = {};
+      for (const field of fields) {
+        if (field.type === "select" && field.loadOptions) {
+          loadedOptions[field.name] = await field.loadOptions();
+        }
+      }
+      setOptions(loadedOptions);
+    };
+    loadOptionsAsync();
+  }, [fields]);
 
   const handleChange = (e, field) => {
     const { name, value, checked } = e.target;
@@ -92,7 +111,6 @@ function GenericDetails({
     try {
       const formattedItem = { ...item };
 
-      // Convertir valores de tipo "time" para el backend
       fields.forEach((field) => {
         if (field.type === "time" && formattedItem[field.name]) {
           formattedItem[field.name] = formatTimeForBackend(formattedItem[field.name]);
@@ -137,6 +155,23 @@ function GenericDetails({
             }
             label={field.label}
           />
+        ) : field.type === "select" ? (
+          <FormControl fullWidth margin="normal" key={field.name}>
+            <InputLabel>{field.label}</InputLabel>
+            <Select
+              value={item[field.name] || ""}
+              onChange={(e) => handleChange(e, field)}
+              disabled={effectiveMode === "view"}
+              name={field.name}
+              label={field.label}
+            >
+              {options[field.name]?.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         ) : (
           <TextField
             key={field.name}
@@ -165,27 +200,6 @@ function GenericDetails({
         >
           Guardar
         </Button>
-      )}
-
-      {effectiveMode === "view" && !isViewOnly && (
-        <>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => navigate(`/${entityName}/edit/${id}`)}
-            sx={{ marginTop: 2 }}
-          >
-            Editar
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => setOpenDialog(true)}
-            sx={{ marginTop: 2, marginLeft: 1 }}
-          >
-            Eliminar
-          </Button>
-        </>
       )}
 
       <Button

@@ -3,25 +3,45 @@ import GenericDetails from "../GenericDetails/GenericDetails";
 import { useParams } from "react-router-dom";
 
 import {
-  getEquipamientoByCi,
+  getEquipamientoById,
   addEquipamiento,
   updateEquipamiento,
-  deleteEquipamientoById
+  deleteEquipamientoById,
+  getActividades
 } from "../../api";
 
 function EquipamientoDetails() {
   const { mode, id } = useParams();
 
   const fields = [
-    { name: "actividad", label: "Actividad", required: true, maxLength: 20 },
-    { name: "descripcion", label: "Descripcion", multiline: true, maxLength: 200 },
-    { name: "costo", label: "Costo", maxLength: 9, type:"number" }
+    {
+      name: "id_actividad",
+      label: "Actividad",
+      type: "select",
+      loadOptions: async () => {
+        const response = await getActividades();
+        return response.data.map((actividad) => ({
+          value: actividad.id,
+          label: actividad.nombre,
+        }));
+      },
+      required: true,
+    },
+    {
+      name: "descripcion",
+      label: "Descripción",
+      multiline: true,
+      maxLength: 200,
+    },
+    { name: "costo", label: "Costo", type: "number", maxLength: 9 },
   ];
 
   return (
     <GenericDetails
-      fetchItem={getEquipamientoByCi}
-      saveItem={(data, ci) =>  mode === "edit" ? updateEquipamiento(ci, data) : addEquipamiento(data)}
+      fetchItem={getEquipamientoById}
+      saveItem={(data, ci) =>
+        mode === "edit" ? updateEquipamiento(ci, data) : addEquipamiento(data)
+      }
       deleteItem={deleteEquipamientoById}
       fields={fields}
       entityName="Equipamiento"

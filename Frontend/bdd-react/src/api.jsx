@@ -39,7 +39,7 @@ export const deleteInstructorByCi = (ci) => axios.delete(`${API_URL}/instructor/
 
 // --- Equipamiento Endpoints ---
 export const addEquipamiento = (equipamiento) => axios.post(`${API_URL}/equipamiento/`, equipamiento);
-export const updateEquipamiento = (ci, equipamiento) => axios.put(`${API_URL}/equipamiento/${ci}`, equipamiento);
+export const updateEquipamiento = (id, equipamiento) => axios.put(`${API_URL}/equipamiento/${id}`, equipamiento);
 export const getEquipamientos = () => axios.get(`${API_URL}/equipamiento`);
-export const getEquipamientoByCi = (ci) => axios.get(`${API_URL}/equipamiento/${ci}`);
-export const deleteEquipamientoById = (ci) => axios.delete(`${API_URL}/equipamiento/${ci}`);
+export const getEquipamientoById = (id) => axios.get(`${API_URL}/equipamiento/${id}`);
+export const deleteEquipamientoById = (id) => axios.delete(`${API_URL}/equipamiento/${id}`);

@@ -10,8 +10,8 @@ function TurnoDetails() {
   const { mode, id } = useParams();
 
   const fields = [
-    { name: "hora_inicio", label: "hora_inicio", type: "time" },
-    { name: "hora_fin", label: "hora_inicio", type: "time" },
+    { name: "hora_inicio", label: "Hora de inicio", type: "time" },
+    { name: "hora_fin", label: "Hora de fin", type: "time" },
   ];
 
   return (

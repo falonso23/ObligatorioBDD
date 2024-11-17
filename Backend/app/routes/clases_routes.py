@@ -25,7 +25,7 @@ def get_clase(id):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     cursor.execute("""
-        SELECT c.id, a.nombre as actividad, CONCAT(i.nombre, ' ', i.apellido) as instructor, CONCAT(t.hora_inicio, ' - ', t.hora_fin) as turno, c.fecha, IF(c.dictada, 'TRUE', 'FALSE') AS dictada FROM Clase c
+        SELECT c.ci_instructor, c.id_actividad, c.id_turno, c.id, a.nombre as actividad, CONCAT(i.nombre, ' ', i.apellido) as instructor, CONCAT(t.hora_inicio, ' - ', t.hora_fin) as turno, c.fecha, IF(c.dictada, 'TRUE', 'FALSE') AS dictada FROM Clase c
         JOIN Actividad a on (a.id = c.id_actividad)
         JOIN Instructor i on (i.ci = c.ci_instructor)
         JOIN Turno t on (t.id = c.id_turno)
@@ -56,24 +56,24 @@ def update_clase(id):
 
     conn = get_db_connection()
     cursor = conn.cursor()
+    print(data)
 
     try:
-        # Verificar si la clase existe
-        cursor.execute("SELECT * FROM Clase WHERE id = %s", (id,))
-        class_ = cursor.fetchone()
+        # Convertir 'dictada' a un valor compatible con SQL (0 o 1)
+        dictada = 1 if data["dictada"] else 0
 
-        if class_ is None:
+        # Actualizar la clase
+        cursor.execute("""
+            UPDATE Clase 
+            SET ci_instructor = %s, id_actividad = %s, id_turno = %s, dictada = %s, fecha = %s 
+            WHERE id = %s
+        """, (data['ci_instructor'], data['id_actividad'], data["id_turno"], dictada, data["fecha"], id))
+
+        # Verificar si se actualizó alguna fila
+        if cursor.rowcount == 0:
+            conn.rollback() 
             return jsonify({'error': 'Clase no encontrada'}), 404
 
-        # Actualizar los datos de la clase
-        cursor.execute(
-            "UPDATE Class SET ci_instructor = %s, id_actividad = %s, id_turno = %s, dictada = %s WHERE id = %s",
-            (data.get('ci_instructor', class_[1]),
-             data.get('id_actividad', class_[2]),
-             data.get('id_turno', class_[3]),
-             data.get('dictada', class_[4]),
-             id)
-        )
         conn.commit()
         return jsonify({'message': 'Clase actualizada correctamente.'}), 200
     except Exception as e:
