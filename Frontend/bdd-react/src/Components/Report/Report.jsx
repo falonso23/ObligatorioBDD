@@ -33,7 +33,7 @@ const formatColumnName = (name) => {
 	return name.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
 
-const formatColumns = (data) => {
+export const formatColumns = (data) => {
 	const colNames = Object.keys(data[0]);
 	const columns = colNames.map(name => {return {field: name, headerName: formatColumnName(name), flex: 1}})
 	return columns;

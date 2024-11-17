@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { getActividad } from "../../api";
 import Box from "@mui/material/Box";
 
-export const CourseDetails = () => {
+export const ActividadDetails = () => {
   const { id } = useParams();
   const [actividad, setActividad] = useState([]);
 
@@ -27,4 +27,4 @@ export const CourseDetails = () => {
   );
 };
 
-export default CourseDetails;
+export default ActividadDetails;
