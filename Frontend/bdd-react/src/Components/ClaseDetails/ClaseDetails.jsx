@@ -42,6 +42,7 @@ function ClaseDetails() {
         }));
       },
     },
+    { name: "fecha", label: "Fecha", type: "date" },
     {
       name: "id_turno",
       label: "Turno",
@@ -56,7 +57,6 @@ function ClaseDetails() {
       },
     },
     { name: "dictada", label: "Dictada", required: true, type: "boolean" },
-    { name: "fecha", label: "Fecha", type: "date" },
   ];
 
   return (

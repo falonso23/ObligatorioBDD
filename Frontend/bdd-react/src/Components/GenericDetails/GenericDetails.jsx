@@ -193,15 +193,11 @@ function GenericDetails({
             margin="normal"
             multiline={field.multiline || false}
             rows={field.multiline ? 4 : undefined}
+            disabled={effectiveMode === "view" || field.disabled}
             InputLabelProps={
               field.type === "date" || field.type === "time"
                 ? { shrink: true }
                 : undefined
-            }
-            InputProps={
-              effectiveMode === "view" || field.disabled
-                ? { readOnly: true }
-                : {}
             }
           />
         )
