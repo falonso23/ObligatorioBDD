@@ -39,7 +39,8 @@ function GenericDetails({
 
   const [item, setItem] = useState(() =>
     fields.reduce((acc, field) => {
-      acc[field.name] = field.defaultValue || (field.type === "boolean" ? false : "");
+      acc[field.name] =
+        field.defaultValue || (field.type === "boolean" ? false : "");
       return acc;
     }, {})
   );
@@ -55,7 +56,9 @@ function GenericDetails({
 
           fields.forEach((field) => {
             if (field.type === "time" && formattedData[field.name]) {
-              formattedData[field.name] = formatTimeToInput(formattedData[field.name]);
+              formattedData[field.name] = formatTimeToInput(
+                formattedData[field.name]
+              );
             }
           });
 
@@ -113,7 +116,9 @@ function GenericDetails({
 
       fields.forEach((field) => {
         if (field.type === "time" && formattedItem[field.name]) {
-          formattedItem[field.name] = formatTimeForBackend(formattedItem[field.name]);
+          formattedItem[field.name] = formatTimeForBackend(
+            formattedItem[field.name]
+          );
         }
       });
 
@@ -132,7 +137,10 @@ function GenericDetails({
   };
 
   return (
-    <Paper elevation={3} sx={{ padding: 4, maxWidth: 600, margin: "20px auto" }}>
+    <Paper
+      elevation={3}
+      sx={{ padding: 4, maxWidth: 600, margin: "20px auto" }}
+    >
       <Typography variant="h4" gutterBottom>
         {effectiveMode === "create"
           ? `Crear ${entityName}`
@@ -140,7 +148,7 @@ function GenericDetails({
           ? `Editar ${entityName}`
           : `Detalles de ${entityName}`}
       </Typography>
-
+  
       {fields.map((field) =>
         field.type === "boolean" ? (
           <FormControlLabel
@@ -183,33 +191,67 @@ function GenericDetails({
             onChange={(e) => handleChange(e, field)}
             fullWidth
             margin="normal"
-            disabled={effectiveMode === "view" || field.disabled}
             multiline={field.multiline || false}
             rows={field.multiline ? 4 : undefined}
-            InputLabelProps={field.type === "date" || field.type === "time" ? { shrink: true } : undefined}
+            InputLabelProps={
+              field.type === "date" || field.type === "time"
+                ? { shrink: true }
+                : undefined
+            }
+            InputProps={
+              effectiveMode === "view" || field.disabled
+                ? { readOnly: true }
+                : {}
+            }
           />
         )
       )}
-
-      {effectiveMode !== "view" && !isViewOnly && (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleSave}
+  
+      {/* Botones */}
+      <div>
+      <Button
+          variant="outlined"
+          onClick={() => navigate(redirectPath)}
           sx={{ marginTop: 2 }}
         >
-          Guardar
+          Volver
         </Button>
-      )}
-
-      <Button
-        variant="outlined"
-        onClick={() => navigate(redirectPath)}
-        sx={{ marginTop: 2, marginLeft: 1 }}
-      >
-        Volver
-      </Button>
-
+        {effectiveMode === "edit" && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSave}
+            sx={{ marginTop: 2, marginLeft: 1 }}
+          >
+            Guardar
+          </Button>
+        )}
+  
+        {effectiveMode === "view" && !isViewOnly && (
+          <>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => navigate(`/${entityName}/edit/${id}`)}
+              sx={{ marginTop: 2, marginLeft: 1 }}
+            >
+              Editar
+            </Button>
+  
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => setOpenDialog(true)}
+              sx={{ marginTop: 2, marginLeft: 1 }}
+            >
+              Eliminar
+            </Button>
+          </>
+        )}
+  
+      </div>
+  
+      {/* Diálogo de Confirmación de Eliminación */}
       <DeleteDialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}
@@ -219,6 +261,7 @@ function GenericDetails({
       />
     </Paper>
   );
+  
 }
 
 export default GenericDetails;

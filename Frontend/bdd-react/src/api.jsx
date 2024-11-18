@@ -11,7 +11,8 @@ export const deleteAlumnoByCi = (ci) => axios.delete(`${API_URL}/alumno/${ci}`);
 
 // --- Actividad Endpoints ---
 export const addActividad = (actividad) => axios.post(`${API_URL}/actividad`, actividad);
-export const getActividad = (id) => axios.get(`${API_URL}/actividad/${id}`);
+export const getActividadById = (id) => axios.get(`${API_URL}/actividad/${id}`);
+export const getActivityImageUrlById = (id) => axios.get(`${API_URL}/actividad/img/${id}`);
 export const getActividades = () => axios.get(`${API_URL}/actividad`);
 
 // --- Turno Endpoints ---

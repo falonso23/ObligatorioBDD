@@ -24,3 +24,14 @@ def get_actividad_by_id(id):
     if not actividad:
         return jsonify({'error': 'Actividad not found'}), 404
     return jsonify(actividad)
+
+@actividad_bp.route("/img/<string:id>",methods=['GET'])
+def get_actividad_image_by_id(id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT url_imagen FROM Actividad WHERE id = %s", (id,))
+    actividad = cursor.fetchone()
+    conn.close()
+    if not actividad:
+        return jsonify({'error': 'Actividad not found'}), 404
+    return jsonify(actividad["url_imagen"])
