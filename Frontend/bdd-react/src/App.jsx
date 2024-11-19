@@ -1,9 +1,15 @@
 
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 
 import Home from "./Components/Home/Home";
 import NavBar from './Components/NavBar/NavBar';
+import Login from './Components/Login/Login';
 
 import ActividadesList from './Components/ActividadesList/ActividadesList';
 import ReportesList from './Components/ReportesList/ReportesList';
@@ -22,46 +28,72 @@ import EquipamientoDetails from './Components/EquipamientoDetails/EquipamientoDe
 import EquipamientosList from './Components/EquipamientosList/EquipamientosList';
 import TurnoDetails from './Components/TurnoDetails/TurnoDetails';
 import TurnosList from './Components/TurnosList/TurnosList';
+
 function App() {
+  const isLoggedIn = sessionStorage.getItem("isLoggedIn"); // Verifica si está logeado
+
   return (
     <Router>
-      <NavBar/>
+      {isLoggedIn && <NavBar />} {/* Muestra el NavBar solo si está logeado */}
       <Routes>
-        <Route path="/" element={<Home />} />
+        {/* Login */}
+        <Route
+          path="/"
+          element={!isLoggedIn ? <Login /> : <Navigate to="/home" replace />}
+        />
 
-        {/* Nav */}
-        <Route path="/actividades" element={<ActividadesList />} />
-        <Route path="/reportes" element={<ReportesList />} />
-        <Route path="/alumnos/" element={<AlumnosList />} />
-        <Route path="/clases/" element={<ClasesList />} />
-        <Route path="/instructores/" element={<InstructoresList />} />
-        <Route path="/equipamientos/" element={<EquipamientosList />} />
-        <Route path="/turnos/" element={<TurnosList />} />
+        {/* Rutas protegidas */}
+        {isLoggedIn ? (
+          <>
+            <Route path="/" element={<Login />} />
+            <Route path="/home" element={<Home />} />
 
-        {/* Actividad */}
-        <Route path="/actividad/:id" element={<ActividadDetails />} />
+            {/* Nav */}
+            <Route path="/actividades" element={<ActividadesList />} />
+            <Route path="/reportes" element={<ReportesList />} />
+            <Route path="/alumnos/" element={<AlumnosList />} />
+            <Route path="/clases/" element={<ClasesList />} />
+            <Route path="/instructores/" element={<InstructoresList />} />
+            <Route path="/equipamientos/" element={<EquipamientosList />} />
+            <Route path="/turnos/" element={<TurnosList />} />
 
-        {/* Reportes */}
-        <Route path="/report/:id" element={<Report />} />
+            {/* Actividad */}
+            <Route path="/actividad/:id" element={<ActividadDetails />} />
 
-        {/* Alumno */}
-        <Route path="/alumno/:mode" element={<AlumnoDetails />} />
-        <Route path="/alumno/:mode/:id" element={<AlumnoDetails />} />  
+            {/* Reportes */}
+            <Route path="/report/:id" element={<Report />} />
 
-        {/* Clases */}
-        <Route path="/clase/:mode" element={<ClaseDetails />} />
-        <Route path="/clase/:mode/:id" element={<ClaseDetails />} />  
+            {/* Alumno */}
+            <Route path="/alumno/:mode" element={<AlumnoDetails />} />
+            <Route path="/alumno/:mode/:id" element={<AlumnoDetails />} />
 
-        {/* Instructor */}
-        <Route path="/instructor/:mode" element={<InstructorDetails />} />
-        <Route path="/instructor/:mode/:id" element={<InstructorDetails />} />  
+            {/* Clases */}
+            <Route path="/clase/:mode" element={<ClaseDetails />} />
+            <Route path="/clase/:mode/:id" element={<ClaseDetails />} />
 
-        {/* Equipamientos */}
-        <Route path="/equipamiento/:mode" element={<EquipamientoDetails />} />
-        <Route path="/equipamiento/:mode/:id" element={<EquipamientoDetails />} />  
+            {/* Instructor */}
+            <Route path="/instructor/:mode" element={<InstructorDetails />} />
+            <Route
+              path="/instructor/:mode/:id"
+              element={<InstructorDetails />}
+            />
 
-        {/* Turnos */}
-        <Route path="/turno/:mode/:id" element={<TurnoDetails />} />  
+            {/* Equipamientos */}
+            <Route
+              path="/equipamiento/:mode"
+              element={<EquipamientoDetails />}
+            />
+            <Route
+              path="/equipamiento/:mode/:id"
+              element={<EquipamientoDetails />}
+            />
+
+            {/* Turnos */}
+            <Route path="/turno/:mode/:id" element={<TurnoDetails />} />
+          </>
+        ) : (
+          <Route path="*" element={<Navigate to="/" replace />} />
+        )}
       </Routes>
     </Router>
   );

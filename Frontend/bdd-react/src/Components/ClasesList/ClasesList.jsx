@@ -7,6 +7,7 @@ function ClasesList() {
     { field: "id", headerName: "Id" },
     { field: "instructor", headerName: "Instructor"},
     { field: "actividad", headerName: "Actividad"},
+    { field: "fecha", headerName: "Fecha"},
     { field: "turno", headerName: "Turno"},
     { field: "dictada", headerName: "Dictada"}
   ];

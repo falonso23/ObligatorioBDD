@@ -44,3 +44,6 @@ export const updateEquipamiento = (id, equipamiento) => axios.put(`${API_URL}/eq
 export const getEquipamientos = () => axios.get(`${API_URL}/equipamiento`);
 export const getEquipamientoById = (id) => axios.get(`${API_URL}/equipamiento/${id}`);
 export const deleteEquipamientoById = (id) => axios.delete(`${API_URL}/equipamiento/${id}`);
+
+// --- Login Endpoint ---
+export const login = (datos) => axios.post(`${API_URL}/login/auth`, datos);

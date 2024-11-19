@@ -212,7 +212,7 @@ function GenericDetails({
         >
           Volver
         </Button>
-        {effectiveMode === "edit" && (
+        {effectiveMode !== "view" && (
           <Button
             variant="contained"
             color="primary"

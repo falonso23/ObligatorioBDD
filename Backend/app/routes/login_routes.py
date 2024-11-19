@@ -3,21 +3,32 @@ from db import get_db_connection
 
 login_bp = Blueprint('login', __name__, url_prefix='/login')
 
-@login_bp.route('/', methods=['GET'])
-def get_logins():
+from flask import Blueprint, jsonify, request
+from db import get_db_connection
+
+login_bp = Blueprint('login', __name__, url_prefix='/login')
+
+@login_bp.route('/auth', methods=['POST'])
+def authenticate_user():
+    data = request.get_json()
+    print(data)
+    correo = data['correo']
+    passwd = data['contrasena']
+
+    if not correo or not passwd:
+        return jsonify({'error': 'Correo y contraseña son requeridos'}), 400
+
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM Login")
-    logins = cursor.fetchall()
-    conn.close()
-    return jsonify(logins)
 
-@login_bp.route('/', methods=['POST'])
-def create_login():
-    data = request.get_json()
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO Login (correo, contrasena) VALUES (%s, %s)", (data['correo'], data['contrasena']))
-    conn.commit()
+    cursor.execute(
+        "SELECT * FROM Login WHERE correo = %s AND contrasena = %s",
+        (correo, passwd)
+    )
+    login = cursor.fetchone()
     conn.close()
-    return jsonify({'message': 'Login created'}), 201
+
+    if login:
+        return jsonify({'message': 'Autenticación exitosa'}), 200
+    else:
+        return jsonify({'error': 'Correo o contraseña incorrectos'}), 401
