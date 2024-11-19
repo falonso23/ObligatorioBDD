@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { TextField, Button, Paper, Typography, Box } from "@mui/material";
 import { login } from "../../api";
 
@@ -13,7 +13,8 @@ function Login() {
     setCredentials((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Evita el comportamiento predeterminado del formulario
     try {
       const response = await login(credentials);
       if (response.status === 200) {
@@ -23,8 +24,10 @@ function Login() {
     } catch (error) {
       console.error("Error en el login:", error);
       if (error.response && error.response.status === 401) {
+        setCredentials((prev) => ({ ...prev, ["contrasena"]: "" }));
         window.alert("Usuario o contraseña incorrectos");
       } else {
+        setCredentials((prev) => ({ ...prev, ["contrasena"]: "" }));
         window.alert("Ocurrió un error. Por favor, inténtalo nuevamente.");
       }
     }
@@ -50,12 +53,13 @@ function Login() {
         }}
       >
         <Typography variant="h4" sx={{ marginBottom: 3 }}>
-          Universidad católica del Uruguay
+          Universidad Católica del Uruguay
         </Typography>
         <Typography variant="h5" sx={{ marginBottom: 3 }}>
           Iniciar Sesión
         </Typography>
-        <form>
+        {/* Formulario para manejar el evento de "Enter" */}
+        <form onSubmit={handleLogin}>
           <TextField
             label="Usuario"
             name="correo"
@@ -80,7 +84,7 @@ function Login() {
             color="primary"
             fullWidth
             sx={{ marginTop: 2 }}
-            onClick={handleLogin}
+            type="submit" // Botón de tipo submit
           >
             Ingresar
           </Button>
