@@ -45,7 +45,7 @@ function GenericDetails({
     }, {})
   );
 
-  const [options, setOptions] = useState({}); // Almacena las opciones dinámicas para selects
+  const [options, setOptions] = useState({});
 
   useEffect(() => {
     if (effectiveMode !== "create" && id) {
@@ -71,7 +71,6 @@ function GenericDetails({
     }
   }, [id, effectiveMode, fetchItem, entityName, fields]);
 
-  // Cargar opciones dinámicas para selects
   useEffect(() => {
     const loadOptionsAsync = async () => {
       const loadedOptions = {};
@@ -111,6 +110,19 @@ function GenericDetails({
   };
 
   const handleSave = async () => {
+    const missingFields = fields
+      .filter((field) => field.required && !item[field.name])
+      .map((field) => field.label);
+
+    if (missingFields.length > 0) {
+      window.alert(
+        `Por favor completa los siguientes campos requeridos:\n${missingFields.join(
+          "\n"
+        )}`
+      );
+      return;
+    }
+
     try {
       const formattedItem = { ...item };
 
@@ -129,6 +141,7 @@ function GenericDetails({
         await saveItem(formattedItem, id);
         window.alert(`${entityName} actualizado correctamente`);
       }
+
       navigate(redirectPath);
     } catch (error) {
       console.error(`Error saving ${entityName}:`, error);
@@ -145,10 +158,10 @@ function GenericDetails({
         {effectiveMode === "create"
           ? `Crear ${entityName}`
           : effectiveMode === "edit"
-          ? `Editar ${entityName}`
-          : `Detalles de ${entityName}`}
+            ? `Editar ${entityName}`
+            : `Detalles de ${entityName}`}
       </Typography>
-  
+
       {fields.map((field) =>
         field.type === "boolean" ? (
           <FormControlLabel
@@ -202,10 +215,10 @@ function GenericDetails({
           />
         )
       )}
-  
+
       {/* Botones */}
       <div>
-      <Button
+        <Button
           variant="outlined"
           onClick={() => navigate(redirectPath)}
           sx={{ marginTop: 2 }}
@@ -222,7 +235,7 @@ function GenericDetails({
             Guardar
           </Button>
         )}
-  
+
         {effectiveMode === "view" && !isViewOnly && (
           <>
             <Button
@@ -233,7 +246,7 @@ function GenericDetails({
             >
               Editar
             </Button>
-  
+
             <Button
               variant="contained"
               color="secondary"
@@ -244,9 +257,8 @@ function GenericDetails({
             </Button>
           </>
         )}
-  
       </div>
-  
+
       {/* Diálogo de Confirmación de Eliminación */}
       <DeleteDialog
         open={openDialog}
@@ -257,7 +269,6 @@ function GenericDetails({
       />
     </Paper>
   );
-  
 }
 
 export default GenericDetails;

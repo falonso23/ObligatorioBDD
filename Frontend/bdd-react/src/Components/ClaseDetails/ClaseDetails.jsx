@@ -7,9 +7,9 @@ import {
   addClase,
   updateClase,
   deleteClaseById,
-  getInstructores, // API para obtener instructores
-  getActividades,  // API para obtener actividades
-  getTurnos,       // API para obtener turnos
+  getInstructores,
+  getActividades, 
+  getTurnos,      
 } from "../../api";
 
 function ClaseDetails() {
@@ -19,8 +19,9 @@ function ClaseDetails() {
     {
       name: "ci_instructor",
       label: "Instructor",
-      type: "select", // Tipo select
+      type: "select",
       required: true,
+      maxLength: 8,
       loadOptions: async () => {
         const response = await getInstructores();
         return response.data.map((instructor) => ({
@@ -32,8 +33,9 @@ function ClaseDetails() {
     {
       name: "id_actividad",
       label: "Actividad",
-      type: "select", // Tipo select
+      type: "select",
       required: true,
+      maxLength: 15,
       loadOptions: async () => {
         const response = await getActividades();
         return response.data.map((actividad) => ({
@@ -42,12 +44,13 @@ function ClaseDetails() {
         }));
       },
     },
-    { name: "fecha", label: "Fecha", type: "date" },
+    { name: "fecha", label: "Fecha", type: "date", required:true },
     {
       name: "id_turno",
       label: "Turno",
-      type: "select", // Tipo select
+      type: "select",
       required: true,
+      maxLength: 15,
       loadOptions: async () => {
         const response = await getTurnos();
         return response.data.map((turno) => ({
@@ -56,7 +59,7 @@ function ClaseDetails() {
         }));
       },
     },
-    { name: "dictada", label: "Dictada", required: true, type: "boolean" },
+    { name: "dictada", label: "Dictada", type: "boolean" },
   ];
 
   return (

@@ -63,6 +63,7 @@ function Login() {
             margin="normal"
             value={credentials.correo}
             onChange={handleChange}
+            inputProps={{ maxLength: 50 }}
           />
           <TextField
             label="Contraseña"
@@ -72,6 +73,7 @@ function Login() {
             margin="normal"
             value={credentials.contrasena}
             onChange={handleChange}
+            inputProps={{ maxLength: 50 }}
           />
           <Button
             variant="contained"

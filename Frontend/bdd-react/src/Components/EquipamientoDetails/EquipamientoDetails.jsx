@@ -26,6 +26,7 @@ function EquipamientoDetails() {
         }));
       },
       required: true,
+      maxLength: 15,
     },
     {
       name: "descripcion",
