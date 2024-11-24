@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -8,26 +7,26 @@ import {
 } from "react-router-dom";
 
 import Home from "./Components/Home/Home";
-import NavBar from './Components/NavBar/NavBar';
-import Login from './Components/Login/Login';
+import NavBar from "./Components/NavBar/NavBar";
+import Login from "./Components/Login/Login";
 
-import ActividadesList from './Components/ActividadesList/ActividadesList';
-import ReportesList from './Components/ReportesList/ReportesList';
-import AlumnosList from './Components/AlumnosList/AlumnosList';
-import ClasesList from './Components/ClasesList/ClasesList';
-import InstructoresList from './Components/InstructoresList/InstructoresList';
+import ActividadesList from "./Components/ActividadesList/ActividadesList";
+import ReportesList from "./Components/ReportesList/ReportesList";
+import AlumnosList from "./Components/AlumnosList/AlumnosList";
+import ClasesList from "./Components/ClasesList/ClasesList";
+import InstructoresList from "./Components/InstructoresList/InstructoresList";
 
-import Report from './Components/Report/Report';
-import ActividadDetails from './Components/ActividadDetails/ActividadDetails';
-import AlumnoDetails from './Components/AlumnoDetails/AlumnoDetails';
-import ClaseDetails from './Components/ClaseDetails/ClaseDetails';
-import InstructorDetails from './Components/InstructorDetails/InstructorDetails';
+import Report from "./Components/Report/Report";
+import ActividadDetails from "./Components/ActividadDetails/ActividadDetails";
+import AlumnoDetails from "./Components/AlumnoDetails/AlumnoDetails";
+import ClaseDetails from "./Components/ClaseDetails/ClaseDetails";
+import InstructorDetails from "./Components/InstructorDetails/InstructorDetails";
 
-import "./App.css"
-import EquipamientoDetails from './Components/EquipamientoDetails/EquipamientoDetails';
-import EquipamientosList from './Components/EquipamientosList/EquipamientosList';
-import TurnoDetails from './Components/TurnoDetails/TurnoDetails';
-import TurnosList from './Components/TurnosList/TurnosList';
+import "./App.css";
+import EquipamientoDetails from "./Components/EquipamientoDetails/EquipamientoDetails";
+import EquipamientosList from "./Components/EquipamientosList/EquipamientosList";
+import TurnoDetails from "./Components/TurnoDetails/TurnoDetails";
+import TurnosList from "./Components/TurnosList/TurnosList";
 
 function App() {
   const isLoggedIn = sessionStorage.getItem("isLoggedIn"); // Verifica si está logeado

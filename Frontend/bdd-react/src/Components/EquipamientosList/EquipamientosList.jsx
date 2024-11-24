@@ -5,9 +5,9 @@ import { getEquipamientos, deleteEquipamientoById } from "../../api";
 function EquipamientosList() {
   const columns = [
     { field: "id", headerName: "Id" },
-    { field: "actividad", headerName: "Actividad"},
-    { field: "descripcion", headerName: "Descripcion"},
-    { field: "costo", headerName: "Costo"},
+    { field: "actividad", headerName: "Actividad" },
+    { field: "descripcion", headerName: "Descripcion" },
+    { field: "costo", headerName: "Costo" },
   ];
 
   return (

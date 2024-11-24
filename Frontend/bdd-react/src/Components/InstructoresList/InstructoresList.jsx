@@ -5,8 +5,8 @@ import { getInstructores, deleteInstructorByCi } from "../../api";
 function InstructoresList() {
   const columns = [
     { field: "ci", headerName: "CI" },
-    { field: "nombre", headerName: "Nombre"},
-    { field: "apellido", headerName: "Apellido"},
+    { field: "nombre", headerName: "Nombre" },
+    { field: "apellido", headerName: "Apellido" },
   ];
 
   return (

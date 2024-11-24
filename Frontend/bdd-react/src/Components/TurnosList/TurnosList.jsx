@@ -4,9 +4,9 @@ import { getTurnos } from "../../api";
 
 function TurnosList() {
   const columns = [
-    { field: "id", headerName: "Id"},
-    { field: "hora_inicio", headerName: "Hora Inicio"},
-    { field: "hora_fin", headerName: "Hora fin"}
+    { field: "id", headerName: "Id" },
+    { field: "hora_inicio", headerName: "Hora Inicio" },
+    { field: "hora_fin", headerName: "Hora fin" },
   ];
 
   return (

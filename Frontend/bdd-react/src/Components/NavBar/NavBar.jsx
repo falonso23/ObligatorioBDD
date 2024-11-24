@@ -11,12 +11,10 @@ import IconButton from "@mui/material/IconButton";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 const NavBar = () => {
-
   const logout = () => {
     sessionStorage.removeItem("isLoggedIn");
     window.location.reload();
   };
-
 
   return (
     <AppBar
@@ -94,7 +92,11 @@ const NavBar = () => {
         >
           Reportes
         </Button>
-        <IconButton color="inherit" onClick={() => logout()} aria-label="Log out">
+        <IconButton
+          color="inherit"
+          onClick={() => logout()}
+          aria-label="Log out"
+        >
           <LogoutIcon />
         </IconButton>
       </Toolbar>

@@ -64,7 +64,11 @@ function ClaseDetails() {
       window.alert("Alumno asignado correctamente");
     } catch (error) {
       console.error(error);
-      window.alert(error.response.data.message);
+      window.alert(
+        error.response?.data?.message
+          ? error.response.data.message
+          : error.message
+      );
     }
   };
 
@@ -85,7 +89,11 @@ function ClaseDetails() {
           );
         }
       } catch (error) {
-        console.error(error.response.data.message);
+        window.alert(
+          error.response?.data?.message
+            ? error.response.data.message
+            : error.message
+        );
       }
     };
 
@@ -104,7 +112,11 @@ function ClaseDetails() {
           );
         }
       } catch (error) {
-        console.error(error.response.data.message);
+        window.alert(
+          error.response?.data?.message
+            ? error.response.data.message
+            : error.message
+        );
       }
     };
 

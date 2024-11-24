@@ -64,7 +64,12 @@ function GenericDetails({
 
           setItem(formattedData);
         } catch (error) {
-          console.error(`Error fetching ${entityName}:`, error.response.data.message);
+          console.error(
+            `Error fetching ${entityName}:`,
+            error.response?.data?.message
+              ? error.response.data.message
+              : error.message
+          );
         }
       };
       fetchData();
@@ -145,7 +150,11 @@ function GenericDetails({
       navigate(redirectPath);
     } catch (error) {
       console.error(`Error saving ${entityName}:`, error);
-      window.alert(error.response.data.message);
+      window.alert(
+        error.response?.data?.message
+          ? error.response.data.message
+          : error.message
+      );
     }
   };
 

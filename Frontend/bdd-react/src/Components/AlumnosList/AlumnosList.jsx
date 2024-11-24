@@ -5,8 +5,8 @@ import { getAlumnos, deleteAlumnoByCi } from "../../api";
 function AlumnosList() {
   const columns = [
     { field: "ci", headerName: "CI" },
-    { field: "nombre", headerName: "Nombre"},
-    { field: "apellido", headerName: "Apellido"},
+    { field: "nombre", headerName: "Nombre" },
+    { field: "apellido", headerName: "Apellido" },
   ];
 
   return (

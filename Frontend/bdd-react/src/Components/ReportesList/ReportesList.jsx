@@ -9,13 +9,12 @@ import Grid from "@mui/material/Grid2";
 
 import { ReportsList } from "../Report/Report";
 
-
 function ReportesList() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleClickReport = (id) => {
-        navigate(`/report/${id}`);
-      };
+  const handleClickReport = (id) => {
+    navigate(`/report/${id}`);
+  };
   return (
     <div>
       <h1 className="page-title">REPORTES</h1>

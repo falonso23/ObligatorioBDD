@@ -29,7 +29,10 @@ function RelatedList({ fetchData, columns, viewRoute }) {
           sortable: false,
           renderCell: (params) => (
             <div>
-              <IconButton color="primary" onClick={() => handleView(params.row)}>
+              <IconButton
+                color="primary"
+                onClick={() => handleView(params.row)}
+              >
                 <VisibilityIcon />
               </IconButton>
             </div>
@@ -54,7 +57,7 @@ function RelatedList({ fetchData, columns, viewRoute }) {
         rows={data}
         columns={finalColumns}
         sx={{ border: 0 }}
-        getRowId={(row) => row.id ? row.id : row.ci} 
+        getRowId={(row) => (row.id ? row.id : row.ci)}
         autoPageSize
       />
     </Paper>

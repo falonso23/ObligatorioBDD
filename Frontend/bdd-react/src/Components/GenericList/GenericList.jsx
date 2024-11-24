@@ -57,7 +57,11 @@ function GenericList({
           prev.filter((item) => getRowId(item) !== selectedItemId)
         );
       } catch (error) {
-        window.alert(error.response.data.message);
+        window.alert(
+          error.response?.data?.message
+            ? error.response.data.message
+            : error.message
+        );
       } finally {
         setOpenDialog(false);
         setSelectedItemId(null);

@@ -12,14 +12,13 @@ import { getActividades } from "../../api";
 import image_placeholder from "../../assets/image_placeholder.jpg";
 
 function ActividadesList() {
-	const navigate = useNavigate();
+  const navigate = useNavigate();
   const [actividades, setActividades] = useState([]);
 
   const handleClickActividad = (id) => {
     navigate(`/actividad/${id}`);
   };
 
-  
   useEffect(() => {
     const fetchActividades = async () => {
       const response = await getActividades();

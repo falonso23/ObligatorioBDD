@@ -7,7 +7,7 @@ import {
   addEquipamiento,
   updateEquipamiento,
   deleteEquipamientoById,
-  getActividades
+  getActividades,
 } from "../../api";
 
 function EquipamientoDetails() {

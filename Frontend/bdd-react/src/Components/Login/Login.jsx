@@ -24,7 +24,11 @@ function Login() {
     } catch (error) {
       console.error("Error en el login:", error);
       setCredentials((prev) => ({ ...prev, ["contrasena"]: "" }));
-      window.alert(error.response.data.message);
+      window.alert(
+        error.response?.data?.message
+          ? error.response.data.message
+          : error.message
+      );
     }
   };
 

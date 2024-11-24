@@ -2,9 +2,7 @@ import React from "react";
 import GenericDetails from "../GenericDetails/GenericDetails";
 import { useParams } from "react-router-dom";
 
-import {
-  getTurnoById
-} from "../../api";
+import { getTurnoById } from "../../api";
 
 function TurnoDetails() {
   const { mode, id } = useParams();
