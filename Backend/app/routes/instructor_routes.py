@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from db import get_db_connection
+from errors import handleError
 
 instructor_bp = Blueprint('instructor', __name__, url_prefix='/instructor')
 
@@ -30,7 +31,7 @@ def add_instructor():
     except Exception as e:
         # Manejo de errores en caso de que ocurra una excepción al insertar
         conn.rollback()
-        return jsonify({'error': str(e)}), 500
+        return handleError(e)
     finally:
         conn.close()
     
@@ -69,7 +70,7 @@ def get_instructor(ci):
 
         return jsonify(instructor_data), 200
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return handleError(e)
     finally:
         # Cerrar la conexión
         conn.close()
@@ -96,7 +97,6 @@ def update_instructor(ci):
     
     except Exception as e:
         conn.rollback()
-        return jsonify({'error': f'Error editando Instructor: {str(e)}'}), 500
-    
+        return handleError(e)    
     finally:
         conn.close()

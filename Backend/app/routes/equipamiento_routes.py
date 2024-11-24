@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from db import get_db_connection
+from errors import handleError
 
 equipamiento_bp = Blueprint('equipamiento', __name__, url_prefix='/equipamiento')
 
@@ -39,7 +40,7 @@ def add_equipamiento():
     except Exception as e:
         # Manejo de errores en caso de que ocurra una excepción al insertar
         conn.rollback()
-        return jsonify({'error': str(e)}), 500
+        return handleError(e)
     finally:
         conn.close()
 
@@ -93,7 +94,6 @@ def update_equipamiento(id):
     
     except Exception as e:
         conn.rollback()
-        return jsonify({'error': f'Error editando Equipamiento: {str(e)}'}), 500
-    
+        return handleError(e)    
     finally:
         conn.close()

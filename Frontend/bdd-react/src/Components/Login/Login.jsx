@@ -23,13 +23,8 @@ function Login() {
       }
     } catch (error) {
       console.error("Error en el login:", error);
-      if (error.response && error.response.status === 401) {
-        setCredentials((prev) => ({ ...prev, ["contrasena"]: "" }));
-        window.alert("Usuario o contraseña incorrectos");
-      } else {
-        setCredentials((prev) => ({ ...prev, ["contrasena"]: "" }));
-        window.alert("Ocurrió un error. Por favor, inténtalo nuevamente.");
-      }
+      setCredentials((prev) => ({ ...prev, ["contrasena"]: "" }));
+      window.alert(error.response.data.message);
     }
   };
 

@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request, json
 from db import get_db_connection
+from errors import handleError, throwError
 
 clases_bp = Blueprint('clase', __name__, url_prefix='/clase')
 
@@ -78,7 +79,7 @@ def update_clase(id):
         return jsonify({'message': 'Clase actualizada correctamente.'}), 200
     except Exception as e:
         conn.rollback()
-        return jsonify({'error': str(e)}), 500
+        return handleError(e)
     finally:
         conn.close()
 
@@ -102,9 +103,80 @@ def delete_clase(id):
         return jsonify({'message': 'Clase eliminada correctamente.'}), 200
     except Exception as e:
         conn.rollback()
-        return jsonify({'error': str(e)}), 500
+        return handleError(e)
+    finally:
+        conn.close()
+
+@clases_bp.route('/<string:id>/alumnos', methods=['GET'])
+def get_alumnos_by_clase_id(id):
+    print(id)
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT ac.id_clase, a.ci, a.nombre, a.apellido FROM Alumno_Clase ac
+        JOIN Alumno a ON (a.ci = ac.ci_alumno)
+        WHERE ac.id_clase = %s
+    """, (id,))
+    clase = cursor.fetchall()
+    conn.close()
+
+    if not clase:
+        return jsonify({'error': 'La clase no existe'}), 404
+
+    response_json = json.dumps(clase, sort_keys=False)
+    return response_json, 200, {'Content-Type': 'application/json'}
+
+@clases_bp.route('/<string:id>/alumnos', methods=['POST'])
+def insert_alumno_to_clase(id):
+    try: 
+        data = request.get_json()
+        print("data" + str(data))
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT Count(*) FROM Alumno_Clase WHERE id_clase = %s AND ci_alumno = %s
+        """, (data["id_clase"],data["ci_alumno"],))
+        clase = cursor.fetchone()
+
+        if clase[0] > 0:
+            return throwError("El alumno ya está anotado en la clase")
+
+        if "id_equipamiento" in data and data["id_equipamiento"] != "":
+            cursor.execute("INSERT INTO Alumno_Clase (id_clase, ci_alumno, id_equipamiento) VALUES (%s, %s, %s)",
+                            (data['id_clase'], data['ci_alumno'], data['id_equipamiento']))
+        else:
+            cursor.execute("INSERT INTO Alumno_Clase (id_clase, ci_alumno, id_equipamiento) VALUES (%s, %s, NULL)",
+                            (data['id_clase'], data['ci_alumno']))
+        conn.commit()
+
+        return jsonify({
+            'message': 'Alumno agregado correctamente a la clase.'
+        }), 201
+    except Exception as e:
+        conn.rollback()
+        return handleError(e)
     finally:
         conn.close()
 
 
-        
+@clases_bp.route('/<string:id_clase>/alumnos/<string:ci_alumno>', methods=['DELETE'])
+def remove_alumno_from_clase(id_clase, ci_alumno):
+    try: 
+        print("Clase: " + id_clase)
+        print("alumno: " + ci_alumno)
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM Alumno_Clase WHERE id_clase = %s AND ci_alumno = %s", (id_clase,ci_alumno,))
+
+        if cursor.rowcount == 0:
+            conn.rollback()
+            return throwError("El alumno no está anotado en la clase")
+
+        conn.commit()
+        return jsonify({'message': 'Alumno eliminado correctamente'}), 200
+    except Exception as e:
+        conn.rollback()
+        return handleError(e)
+    finally:
+        conn.close()

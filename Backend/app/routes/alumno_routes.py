@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request, json
 from db import get_db_connection
+from errors import handleError
 
 alumno_bp = Blueprint('alumno', __name__, url_prefix='/alumno')
 
@@ -54,7 +55,7 @@ def create_alumno():
     except Exception as e:
         print(e)
         conn.rollback()
-        return jsonify({'error': str(e)}), 500
+        return handleError(e)
     finally:
         conn.close()
 
@@ -79,7 +80,7 @@ def update_alumno(ci):
     
     except Exception as e:
         conn.rollback()
-        return jsonify({'error': f'Error editando alumno: {str(e)}'}), 500
+        return handleError(e)
     
     finally:
         conn.close()
@@ -100,7 +101,6 @@ def delete_alumno(ci):
 
     except Exception as e:
         conn.rollback()
-        return jsonify({'error': f'Error al eliminar el alumno: {str(e)}'}), 500
-
+        return handleError(e)
     finally:
         conn.close()

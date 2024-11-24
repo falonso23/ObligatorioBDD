@@ -30,6 +30,9 @@ export const getClaseById = (id) => axios.get(`${API_URL}/clase/${id}`);
 export const deleteClaseById = (id) => axios.delete(`${API_URL}/clase/${id}`);
 export const addClase = (clase) => axios.post(`${API_URL}/clase/`, clase);
 export const updateClase = (id, clase) => axios.put(`${API_URL}/clase/${id}`, clase);
+export const getAlumnosByClase = (id) => axios.get(`${API_URL}/clase/${id}/alumnos`);
+export const addAlumnoClase = (item) => axios.post(`${API_URL}/clase/${item.id_clase}/alumnos`, item);
+export const removeAlumnoClase = (item) => axios.delete(`${API_URL}/clase/${item.id_clase}/alumnos/${item.ci_alumno}`);
 
 // --- Instructor Endpoints ---
 export const addInstructor = (instructor) => axios.post(`${API_URL}/instructor/`, instructor);

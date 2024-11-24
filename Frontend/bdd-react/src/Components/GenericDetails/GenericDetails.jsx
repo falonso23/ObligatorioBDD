@@ -64,7 +64,7 @@ function GenericDetails({
 
           setItem(formattedData);
         } catch (error) {
-          console.error(`Error fetching ${entityName}:`, error);
+          console.error(`Error fetching ${entityName}:`, error.response.data.message);
         }
       };
       fetchData();
@@ -103,7 +103,7 @@ function GenericDetails({
       navigate(redirectPath);
     } catch (error) {
       console.error(`Error deleting ${entityName}:`, error);
-      window.alert(`Error al eliminar ${entityName}`);
+      window.alert(error.message);
     } finally {
       setOpenDialog(false);
     }
@@ -145,7 +145,7 @@ function GenericDetails({
       navigate(redirectPath);
     } catch (error) {
       console.error(`Error saving ${entityName}:`, error);
-      window.alert(`Error al guardar ${entityName}`);
+      window.alert(error.response.data.message);
     }
   };
 
@@ -259,7 +259,6 @@ function GenericDetails({
         )}
       </div>
 
-      {/* Diálogo de Confirmación de Eliminación */}
       <DeleteDialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}

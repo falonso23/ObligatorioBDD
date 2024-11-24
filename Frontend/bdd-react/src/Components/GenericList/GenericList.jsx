@@ -7,8 +7,10 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 
 import DeleteDialog from "../DeleteDialog/DeleteDialog";
 
@@ -21,7 +23,10 @@ function GenericList({
   createPath,
   editPath,
   viewPath,
-  isViewOnly = false, // Nuevo prop para modo view-only
+  isViewOnly = false,
+  isRelatedList = false,
+  onRemove,
+  height = "80vh",
 }) {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
@@ -39,6 +44,10 @@ function GenericList({
     navigate(`${viewPath}/${getRowId(row)}`);
   };
 
+  const handleRemove = async (row) => {
+    await onRemove(getRowId(row));
+  };
+
   const handleDelete = async () => {
     if (!isViewOnly) {
       try {
@@ -48,9 +57,7 @@ function GenericList({
           prev.filter((item) => getRowId(item) !== selectedItemId)
         );
       } catch (error) {
-        const errorMessage =
-          error.response?.data?.error || `Error al eliminar ${entityName}`;
-        window.alert(errorMessage);
+        window.alert(error.response.data.message);
       } finally {
         setOpenDialog(false);
         setSelectedItemId(null);
@@ -77,10 +84,22 @@ function GenericList({
           sortable: false,
           renderCell: (params) => (
             <div>
-              <IconButton color="primary" onClick={() => handleView(params.row)}>
+              <IconButton
+                color="primary"
+                onClick={() => handleView(params.row)}
+              >
                 <VisibilityIcon />
               </IconButton>
-              {!isViewOnly && (
+              {isRelatedList && (
+                <IconButton
+                  color="error"
+                  onClick={() => handleRemove(params.row)}
+                >
+                  <RemoveCircleOutlineIcon />
+                </IconButton>
+              )}
+              {/* Botones estándar solo fuera de modo "related list" */}
+              {!isRelatedList && !isViewOnly && (
                 <>
                   <IconButton
                     color="primary"
@@ -114,13 +133,18 @@ function GenericList({
       }
     };
     fetchDataAsync();
-  }, [fetchData, baseColumns, entityName, getRowId, isViewOnly]);
+  }, [fetchData, baseColumns, entityName, getRowId, isViewOnly, isRelatedList]);
 
   return (
     <div className="report_container">
       <div className="header">
-        <h1 className="page-title">{entityName}</h1>
-        {!isViewOnly && (
+        {isRelatedList && (
+          <Typography variant="h4" gutterBottom>
+            {entityName}
+          </Typography>
+        )}
+        {!isRelatedList && <h1 className="page-title">{entityName}</h1>}
+        {!isViewOnly && !isRelatedList && (
           <Button
             variant="contained"
             startIcon={<AddIcon />}
@@ -136,10 +160,7 @@ function GenericList({
           </Button>
         )}
       </div>
-      <Paper
-        sx={{ height: "80vh", width: "100%", margin: "0 auto" }}
-        elevation={5}
-      >
+      <Paper sx={{ height, width: "100%", margin: "0 auto" }} elevation={5}>
         <DataGrid
           rows={rows}
           columns={columns}
@@ -148,7 +169,7 @@ function GenericList({
           autoPageSize
         />
       </Paper>
-      {!isViewOnly && (
+      {!isViewOnly && !isRelatedList && (
         <DeleteDialog
           open={openDialog}
           onClose={() => setOpenDialog(false)}
