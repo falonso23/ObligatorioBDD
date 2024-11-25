@@ -5,6 +5,7 @@ login_bp = Blueprint('login', __name__, url_prefix='/login')
 
 from flask import Blueprint, jsonify, request
 from db import get_db_connection
+from utils import throwError
 
 login_bp = Blueprint('login', __name__, url_prefix='/login')
 
@@ -15,8 +16,12 @@ def authenticate_user():
     correo = data['correo']
     passwd = data['contrasena']
 
-    if not correo or not passwd:
-        return jsonify({'error': 'Correo y contraseña son requeridos'}), 400
+    if not correo or '@' not in correo and correo != "admin": #admin para debug
+        return throwError("Ingrese un correo valido")
+
+    if not passwd:
+        return throwError("Ingrese una contraseña")
+
 
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
@@ -31,4 +36,4 @@ def authenticate_user():
     if login:
         return jsonify({'message': 'Autenticación exitosa'}), 200
     else:
-        return jsonify({'error': 'Correo o contraseña incorrectos'}), 401
+        return throwError("Correo o contraseña invalidos")

@@ -39,7 +39,7 @@ const formatColumnName = (name) => {
 export const formatColumns = (data) => {
   const colNames = Object.keys(data[0]);
   const columns = colNames.map((name) => {
-    return { field: name, headerName: formatColumnName(name), flex: 1 };
+    return { field: name, headerName: formatColumnName(name), flex: 1, sortable: false };
   });
   return columns;
 };
@@ -57,6 +57,7 @@ const Report = () => {
 
       const fetchReport = async () => {
         const response = await report.fetchFunct();
+        console.log('Response data:' , response.data)
         setReportData(response.data);
         const cols = formatColumns(response.data);
         setColumns(cols);
@@ -84,7 +85,11 @@ const Report = () => {
           rows={reportData}
           columns={columns}
           sx={{ border: 0 }}
-          getRowId={(row) => (row.id ? row.id : row.ci)}
+          getRowId={(row) => {
+            if(row.id) return row.id;
+            if(row.ci) return row.ci;
+            if(row.nombre) return row.nombre;
+          }}
           autoPageSize
         />
       </Paper>
