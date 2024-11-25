@@ -106,6 +106,7 @@ INSERT INTO Alumno_Clase (id_clase, ci_alumno, id_equipamiento) VALUES
 
 -- Insertar datos de login
 INSERT INTO Login (correo, contrasena) VALUES
+('admin', 'admin'),
 ('juan.gomez@ucu.edu', 'password1'),
 ('maria.rodriguez@ucu.edu', 'password2'),
 ('pedro.sanchez@ucu.edu', 'password3'),
