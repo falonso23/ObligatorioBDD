@@ -140,14 +140,32 @@ function GenericDetails({
       });
 
       if (effectiveMode === "create") {
-        await saveItem(formattedItem);
-        window.alert(`${entityName} creado correctamente`);
+        try {
+          await saveItem(formattedItem);
+          window.alert(`${entityName} creado correctamente`);
+          navigate(redirectPath);
+        } catch (error) {
+          console.error(`Error saving ${entityName}:`, error);
+          window.alert(
+            error.response?.data?.message
+              ? error.response.data.message
+              : error.message
+          );
+        }
       } else if (effectiveMode === "edit") {
-        await saveItem(formattedItem, id);
-        window.alert(`${entityName} actualizado correctamente`);
+        try {
+          await saveItem(formattedItem, id);
+          window.alert(`${entityName} actualizado correctamente`);
+          navigate(redirectPath);
+        } catch (error) {
+          console.error(`Error saving ${entityName}:`, error);
+          window.alert(
+            error.response?.data?.message
+              ? error.response.data.message
+              : error.message
+          );
+        }
       }
-
-      navigate(redirectPath);
     } catch (error) {
       console.error(`Error saving ${entityName}:`, error);
       window.alert(
@@ -159,10 +177,7 @@ function GenericDetails({
   };
 
   return (
-    <Paper
-      elevation={3}
-      sx={{ padding: 4, maxWidth: 600, margin: "20px auto" }}
-    >
+    <Paper elevation={3} sx={{ padding: 4, width: 600, margin: "20px auto" }}>
       <Typography variant="h4" gutterBottom>
         {effectiveMode === "create"
           ? `Crear ${entityName}`

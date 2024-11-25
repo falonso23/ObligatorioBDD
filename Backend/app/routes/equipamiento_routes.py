@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from db import get_db_connection
-from errors import handleError
+from utils import handleError, generateNewId
 
 equipamiento_bp = Blueprint('equipamiento', __name__, url_prefix='/equipamiento')
 
@@ -23,12 +23,8 @@ def add_equipamiento():
         cursor.execute("SELECT id FROM Equipamiento ORDER BY id DESC LIMIT 1")
         last_record = cursor.fetchone() 
 
-        last_id = last_record[0] if last_record else None
-        splitted = last_id.split("-")
-        last_number = int(splitted[1])
-        new_number = str(last_number+1)
-        new_id = splitted[0] + "-" +(5-len(new_number))*"0" + new_number
-        print(new_id)
+        last_id = last_record[0] if last_record else "EQU-00001"
+        new_id = generateNewId(last_id)
 
         cursor.execute("INSERT INTO Equipamiento (id, id_actividad, descripcion, costo) VALUES (%s, %s, %s, %s)",
                        (new_id, data['id_actividad'], data['descripcion'], data['costo']))

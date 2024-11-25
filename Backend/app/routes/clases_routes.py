@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request, json
 from db import get_db_connection
-from errors import handleError, throwError
+from utils import handleError, throwError, generateNewId
+from datetime import datetime
 
 clases_bp = Blueprint('clase', __name__, url_prefix='/clase')
 
@@ -48,8 +49,40 @@ def get_clase(id):
 # 3. Agregar una nueva clase
 @clases_bp.route('/', methods=['POST'])
 def add_clase():
-    print("clase agregada")
-    return jsonify({'message': 'Clase agregada.'}), 200
+    data = request.get_json()
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    print("add clase; " + str(data))
+    try:
+        print("Before")
+        cursor.execute("SELECT id FROM Clase WHERE fecha = %s AND ci_instructor = %s AND id_turno = %s", (data["fecha"], data["ci_instructor"], data["id_turno"]))
+        print("After")
+        clase_instructor = cursor.fetchone()
+        print("Clase instructor: " + str(clase_instructor))
+        if clase_instructor != None:
+            print('Here: ')
+            return throwError("El instructor ya está asignado a una clase el " + str(data["fecha"]) + " en este turno")
+
+        cursor.execute("SELECT id FROM Clase ORDER BY id DESC LIMIT 1")
+        last_record = cursor.fetchone() 
+        last_id = last_record[0] if last_record else "CLA-00001"
+        new_id = generateNewId(last_id)
+
+        dictada = 1 if data["dictada"] else 0
+
+        print("Inserting clase: " + str(data))
+        cursor.execute("INSERT INTO Clase (id, ci_instructor, id_actividad, id_turno, fecha, dictada) VALUES (%s, %s, %s, %s, %s, %s)",
+                       (new_id, data['ci_instructor'], data['id_actividad'], data['id_turno'], data['fecha'], dictada))
+        conn.commit()
+
+        return jsonify({
+            'message': 'Clase agregada correctamente.'
+        }), 201
+    except Exception as e:
+        conn.rollback()
+        return handleError(e)
+    finally:
+        conn.close()
 
 @clases_bp.route('/<string:id>', methods=['PUT'])
 def update_clase(id):
@@ -63,17 +96,18 @@ def update_clase(id):
         # Convertir 'dictada' a un valor compatible con SQL (0 o 1)
         dictada = 1 if data["dictada"] else 0
 
-        # Actualizar la clase
+        if _claseEnTranscurso(cursor):
+            return throwError("No se puede editar la clase mientras está en curso")
+
         cursor.execute("""
             UPDATE Clase 
             SET ci_instructor = %s, id_actividad = %s, id_turno = %s, dictada = %s, fecha = %s 
             WHERE id = %s
         """, (data['ci_instructor'], data['id_actividad'], data["id_turno"], dictada, data["fecha"], id))
 
-        # Verificar si se actualizó alguna fila
         if cursor.rowcount == 0:
             conn.rollback() 
-            return jsonify({'error': 'Clase no encontrada'}), 404
+            return throwError("Clase no encontrada")
 
         conn.commit()
         return jsonify({'message': 'Clase actualizada correctamente.'}), 200
@@ -93,9 +127,11 @@ def delete_clase(id):
         # Verificar si la clase existe
         cursor.execute("SELECT * FROM Clase WHERE id = %s", (id,))
         class_ = cursor.fetchone()
-
         if class_ is None:
-            return jsonify({'error': 'Clase no encontrada'}), 404
+            return throwError("Clase no encontrada")
+        
+        if _claseEnTranscurso(cursor):
+            return throwError("No se puede editar la clase mientras está en curso")
 
         # Eliminar la clase
         cursor.execute("DELETE FROM Clase WHERE id = %s", (id,))
@@ -134,13 +170,36 @@ def insert_alumno_to_clase(id):
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        cursor.execute("""
-            SELECT Count(*) FROM Alumno_Clase WHERE id_clase = %s AND ci_alumno = %s
-        """, (data["id_clase"],data["ci_alumno"],))
-        clase = cursor.fetchone()
-
-        if clase[0] > 0:
+        cursor.execute("SELECT * FROM Alumno_Clase WHERE id_clase = %s AND ci_alumno = %s", (data["id_clase"],data["ci_alumno"],))
+        alumno_en_clase = cursor.fetchone()
+        if alumno_en_clase != None:
             return throwError("El alumno ya está anotado en la clase")
+        print("Here")
+        cursor.execute("""SELECT c.id, c.fecha, t.hora_inicio, t.hora_fin
+                        FROM Clase c
+                        JOIN Turno t on (c.id_turno = t.id)
+                        WHERE c.id = %s
+        """, (data["id_clase"], ))
+        current_class = cursor.fetchone()
+        print("current_class: " + str(current_class))
+
+        if current_class != None:
+            id_clase, fecha, hora_inicio, hora_fin = current_class
+            hora_inicio_str = (datetime.min + hora_inicio).time().strftime("%H:%M:%S")
+
+            cursor.execute("""SELECT c.id, c.fecha, t.hora_inicio, t.hora_fin
+                FROM Alumno_Clase ac
+                JOIN Clase c on (c.id = ac.id_clase)
+                JOIN Turno t on (c.id_turno = t.id)
+                WHERE ac.ci_alumno = %s
+                AND t.hora_inicio = %s
+                AND c.fecha = %s
+            """, (data["ci_alumno"], hora_inicio_str, fecha, ))
+            otra_clase_alumno = cursor.fetchone()
+            print("Otra clase alumno: " + str(otra_clase_alumno))
+        
+            if otra_clase_alumno != None:
+                return throwError("El alumno ya está anotado en otra clase en este turno")    
 
         if "id_equipamiento" in data and data["id_equipamiento"] != "":
             cursor.execute("INSERT INTO Alumno_Clase (id_clase, ci_alumno, id_equipamiento) VALUES (%s, %s, %s)",
@@ -167,16 +226,26 @@ def remove_alumno_from_clase(id_clase, ci_alumno):
         print("alumno: " + ci_alumno)
         conn = get_db_connection()
         cursor = conn.cursor()
+
+        if _claseEnTranscurso(cursor):
+            return throwError("No se puede editar la clase mientras está en curso")
+        
         cursor.execute("DELETE FROM Alumno_Clase WHERE id_clase = %s AND ci_alumno = %s", (id_clase,ci_alumno,))
-
-        if cursor.rowcount == 0:
-            conn.rollback()
-            return throwError("El alumno no está anotado en la clase")
-
         conn.commit()
+
         return jsonify({'message': 'Alumno eliminado correctamente'}), 200
     except Exception as e:
         conn.rollback()
         return handleError(e)
     finally:
         conn.close()
+
+
+def _claseEnTranscurso(cursor):
+        fecha_actual = datetime.today().strftime('%Y-%m-%d')
+        hora_actual = datetime.today().strftime('%H:%M:%S')
+
+        cursor.execute("SELECT c.id FROM Clase c JOIN Turno t ON (t.id = c.id_turno) WHERE fecha = %s AND hora_inicio < %s AND hora_fin >= %s", (fecha_actual, hora_actual, hora_actual))
+        clase = cursor.fetchone()
+        print("Clase en transcurso: " + str(clase))
+        return clase != None

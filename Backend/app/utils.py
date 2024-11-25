@@ -12,6 +12,13 @@ def handleError(e):
 
 def throwError(message):
     return jsonify({
-    'error': "Custom",
-    'message': message,
-}), 400
+        'error': "Custom",
+        'message': message,
+    }), 400
+
+def generateNewId(last_id):
+    splitted = last_id.split("-")
+    last_number = int(splitted[1])
+    new_number = str(last_number+1)
+    new_id = splitted[0] + "-" +(5-len(new_number))*"0" + new_number
+    return new_id

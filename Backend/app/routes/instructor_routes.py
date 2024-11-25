@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from db import get_db_connection
-from errors import handleError
+from utils import handleError
 
 instructor_bp = Blueprint('instructor', __name__, url_prefix='/instructor')
 

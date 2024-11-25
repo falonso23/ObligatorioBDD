@@ -47,6 +47,15 @@ function ClaseDetails() {
     refreshTable();
   };
 
+    const handleSaveItem = (mode, id, data) => {
+        if (mode === "edit") {
+        return updateClase(id, data);
+        } else {
+        return addClase(data);
+        }
+    };
+  
+
   const asignarAlumno = async () => {
     if (!selectedAlumnoCi || selectedAlumnoCi === "") {
       window.alert("Seleccione un alumno");
@@ -119,9 +128,10 @@ function ClaseDetails() {
         );
       }
     };
-
-    fetchAlumnos();
-    fetchEquipamientos();
+    if (mode === "view") {
+      fetchAlumnos();
+      fetchEquipamientos();
+    }
   }, []);
 
   const fields = [
@@ -208,91 +218,93 @@ function ClaseDetails() {
           redirectPath="/clases"
         />
       </div>
-      <div
-        style={{
-          flex: "1",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-          gap: "20px",
-        }}
-      >
-        <GenericList
-          fetchData={() => getAlumnosByClase(id)}
-          baseColumns={alumnoCols}
-          getRowId={(row) => row.ci}
-          entityName="Alumnos Relacionados"
-          viewPath="/alumnos/view"
-          isRelatedList={true}
-          onRemove={(ci) => eliminarRelacionAlumno(ci, id)}
-          height="50vh"
-        />
+      {mode === "view" && (
+        <div
+          style={{
+            flex: "1",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            gap: "20px",
+          }}
+        >
+          <GenericList
+            fetchData={() => getAlumnosByClase(id)}
+            baseColumns={alumnoCols}
+            getRowId={(row) => row.ci}
+            entityName="Alumnos Relacionados"
+            viewPath="/alumno/view"
+            isRelatedList={true}
+            onRemove={(ci) => eliminarRelacionAlumno(ci, id)}
+            height="50vh"
+          />
 
-        <div style={{ marginTop: "20px", width: "100%" }}>
-          <Typography variant="h4" gutterBottom>
-            Asignar alumno
-          </Typography>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              gap: "10px",
-            }}
-          >
-            <Autocomplete
-              disablePortal
-              options={allAlumnosPicklist}
-              getOptionLabel={(option) => option.label || ""}
-              sx={{ flex: "0 0 35%" }}
-              required
-              onChange={(event, newValue) => {
-                setSelectedAlumnoCi(newValue ? newValue.value : "");
-              }}
-              value={
-                allAlumnosPicklist.find(
-                  (option) => option.value === selectedAlumnoCi
-                ) || null
-              }
-              renderInput={(params) => (
-                <TextField {...params} label="Alumno" variant="outlined" />
-              )}
-            />
-
-            <Autocomplete
-              disablePortal
-              options={allEquipamientosPicklist}
-              getOptionLabel={(option) => option.label || ""}
-              sx={{ flex: "0 0 35%" }}
-              onChange={(event, newValue) => {
-                setSelectedEquipamientoId(newValue ? newValue.value : "");
-              }}
-              value={
-                allEquipamientosPicklist.find(
-                  (option) => option.value === selectedEquipamientoId
-                ) || null
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Equipamiento"
-                  variant="outlined"
-                />
-              )}
-            />
-
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={asignarAlumno}
-              disabled={!selectedAlumnoCi}
-              sx={{ flex: "0 0 25%", height: "56px" }}
-            >
+          <div style={{ marginTop: "20px", width: "100%" }}>
+            <Typography variant="h4" gutterBottom>
               Asignar alumno
-            </Button>
+            </Typography>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: "10px",
+              }}
+            >
+              <Autocomplete
+                disablePortal
+                options={allAlumnosPicklist}
+                getOptionLabel={(option) => option.label || ""}
+                sx={{ flex: "0 0 35%" }}
+                required
+                onChange={(event, newValue) => {
+                  setSelectedAlumnoCi(newValue ? newValue.value : "");
+                }}
+                value={
+                  allAlumnosPicklist.find(
+                    (option) => option.value === selectedAlumnoCi
+                  ) || null
+                }
+                renderInput={(params) => (
+                  <TextField {...params} label="Alumno" variant="outlined" />
+                )}
+              />
+
+              <Autocomplete
+                disablePortal
+                options={allEquipamientosPicklist}
+                getOptionLabel={(option) => option.label || ""}
+                sx={{ flex: "0 0 35%" }}
+                onChange={(event, newValue) => {
+                  setSelectedEquipamientoId(newValue ? newValue.value : "");
+                }}
+                value={
+                  allEquipamientosPicklist.find(
+                    (option) => option.value === selectedEquipamientoId
+                  ) || null
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Equipamiento"
+                    variant="outlined"
+                  />
+                )}
+              />
+
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={asignarAlumno}
+                disabled={!selectedAlumnoCi}
+                sx={{ flex: "0 0 25%", height: "56px" }}
+              >
+                Asignar alumno
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
